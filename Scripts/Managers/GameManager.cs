@@ -1,0 +1,28 @@
+using Godot;
+using System;
+
+public partial class GameManager : Node
+{
+    static private Player player;
+    static public Player GetPlayer => player;
+    static private PlayerCamera playerCamera;
+    static public PlayerCamera GetPlayerCamera => playerCamera;
+
+
+    static private PackedScene PlayerScene = (PackedScene)ResourceLoader.Load("res://Object-Collections/Player.tscn");  
+    static private PackedScene PlayerCameraScene = (PackedScene)ResourceLoader.Load("res://Object-Collections/PlayerCamera.tscn");
+
+    public override void _Ready()
+    {
+        GD.Print("Game Manager Ready");
+
+        Input.SetMouseMode(Input.MouseModeEnum.Captured);
+
+        player = PlayerScene.Instantiate<Player>();
+        AddChild(player);
+
+        playerCamera = PlayerCameraScene.Instantiate<PlayerCamera>();
+        playerCamera.SetCameraTarget(player.CameraTarget);
+        AddChild(playerCamera);
+    }
+}

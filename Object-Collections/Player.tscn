@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3qvrcxvkf4yv"]
+
+[ext_resource type="Script" path="res://Scripts/Player/Player.cs" id="1_syccv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e7dxw"]
+
+[node name="Player" type="CharacterBody3D"]
+floor_max_angle = 0.872665
+floor_snap_length = 0.25
+script = ExtResource("1_syccv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_e7dxw")
+
+[node name="CameraTarget" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+
+[node name="LeftHand" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 1, -0.75)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="LeftHand"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="LeftHand/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.776339, 0)
+size = Vector3(0.05, 1.362, 0.15)
+
+[node name="RightHand" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 1, -0.75)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="RightHand"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="RightHand/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.211635, -0.151251)
+size = Vector3(1, 1.25, 0.075)
