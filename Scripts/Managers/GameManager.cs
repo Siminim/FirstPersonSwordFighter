@@ -8,9 +8,8 @@ public partial class GameManager : Node
     static private PlayerCamera playerCamera;
     static public PlayerCamera GetPlayerCamera => playerCamera;
 
-
-    static private PackedScene PlayerScene = (PackedScene)ResourceLoader.Load("res://Object-Collections/Player.tscn");  
-    static private PackedScene PlayerCameraScene = (PackedScene)ResourceLoader.Load("res://Object-Collections/PlayerCamera.tscn");
+    static private PackedScene PlayerScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Player/Player.tscn");  
+    static private PackedScene PlayerCameraScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Player/PlayerCamera.tscn");
 
     public override void _Ready()
     {

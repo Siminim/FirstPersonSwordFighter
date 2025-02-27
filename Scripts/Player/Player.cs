@@ -70,6 +70,8 @@ public partial class Player : CharacterBody3D
 
     public PlayerActionEventManager actionEventManager = new PlayerActionEventManager();
 
+    public (HeldItem, HeldItem) heldItems = (null, null);
+
     // ----------------------------------------------------------------------------------
     // ------------------------- Setup and Ready Functions ------------------------------
     // ---------------------------------------------------------------------------------- 
@@ -84,6 +86,14 @@ public partial class Player : CharacterBody3D
         rightHandDefaultPosition = rightHand.Position;
 
         SetupActionEvents();
+
+        // DEBUG: Create a test held item here
+        PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardShield.tscn");
+        StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
+        AddChild(standardShield);
+        standardShield.Reparent(leftHand);
+        standardShield.Position = Vector3.Zero;
+        heldItems.Item1 = standardShield;
     }
 
     private void SetupActionEvents()
@@ -133,6 +143,8 @@ public partial class Player : CharacterBody3D
         LookControllerAction(delta);
         MovementAction(delta);
         JumpAction();
+
+        HeldItems(delta);
     }
 
     // ----------------------------------------------------------------------------------
@@ -191,6 +203,35 @@ public partial class Player : CharacterBody3D
         }
     }
 
+    private void HeldItems(double delta)
+    {
+        if (heldItems.Item1 != null)
+        {
+            if (Input.IsActionJustPressed("ActivateLeftHand"))
+                heldItems.Item1.OnPressActivate();
+
+            bool leftHandActive = Input.IsActionPressed("ActivateLeftHand");
+            heldItems.Item1.OnHoldActivate(leftHandActive, delta);
+
+            if (Input.IsActionJustReleased("ActivateLeftHand"))
+                heldItems.Item1.OnReleaseActivate();
+        }
+
+        if (heldItems.Item2 != null)
+        {
+            if (Input.IsActionJustPressed("ActivateRightHand"))
+                heldItems.Item2.OnPressActivate();
+
+            bool rightHandActive = Input.IsActionPressed("ActivateRightHand");
+            heldItems.Item2.OnHoldActivate(rightHandActive, delta);
+
+            if (Input.IsActionJustReleased("ActivateRightHand"))
+                heldItems.Item2.OnReleaseActivate();
+        }
+    }
+
+
+
     //  ----------------------------------------------------------------------------------
     //  ------------------------------ Personal Functions --------------------------------
     //  ----------------------------------------------------------------------------------
@@ -235,31 +276,5 @@ public partial class Player : CharacterBody3D
             }
         }
     }
-
-    private void RaiseShield(double delta)
-    {
-        if (Input.IsActionPressed("ActivateRightHand"))
-        {
-
-            Vector3 targetPos = new Vector3(0.3f, 1.3f, -0.45f);
-            Vector3 posDiff = rightHand.Position - targetPos;
-            rightHand.Position -= posDiff * (float)delta * 10.0f;
-
-
-            Vector3 targetRot = new Vector3(0.0f, 0.0f, Mathf.DegToRad(16.0f));
-            Vector3 rotDiff = rightHand.Rotation - targetRot;
-            rightHand.Rotation -= rotDiff * (float)delta * 10.0f;
-        }
-        else
-        {
-            Vector3 posDiff = rightHand.Position - rightHandDefaultPosition;
-            rightHand.Position -= posDiff * (float)delta * 10.0f;
-
-            Vector3 targetRot = Vector3.Zero;
-            Vector3 rotDiff = rightHand.Rotation - targetRot;
-            rightHand.Rotation -= rotDiff * (float)delta * 10.0f;
-        }
-    }
-
 
 }

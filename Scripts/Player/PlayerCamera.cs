@@ -8,6 +8,8 @@ public partial class PlayerCamera : Node3D
     private Camera3D camera;
     public Camera3D Camera => camera;
 
+    private float correctionMoveSpeed = 30.0f; 
+
     public override void _Ready()
     {
         camera = GetNode<Camera3D>("Camera3D");
@@ -25,7 +27,7 @@ public partial class PlayerCamera : Node3D
 
     private void InterpolateCamera(double delta)
     {
-        GlobalPosition = GlobalPosition.Lerp(cameraTarget.GlobalPosition, (float)delta * 25.0f);
+        GlobalPosition = GlobalPosition.Lerp(cameraTarget.GlobalPosition, (float)delta * correctionMoveSpeed);
     }
 
 }
