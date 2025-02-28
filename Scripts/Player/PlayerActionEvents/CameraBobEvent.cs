@@ -24,7 +24,7 @@ public class CameraBobEvent : PlayerActionEvent
     public override void OnEffectProcess(double delta)
     {
         HeadBob(delta);
-        HeadRoll(delta);
+        //HeadRoll(delta);
     }
 
     private void HeadBob(double delta)

@@ -31,10 +31,14 @@ public partial class Player : CharacterBody3D
     public Node3D CameraTarget => cameraTarget;
 
     private Node3D leftHand;
+    public Node3D LeftHand => leftHand;
     private Node3D rightHand;
+    public Node3D RightHand => rightHand;
 
     private Vector3 leftHandDefaultPosition;
+    public Vector3 LeftHandDefaultPosition => leftHandDefaultPosition;
     private Vector3 rightHandDefaultPosition;
+    public Vector3 RightHandDefaultPosition => rightHandDefaultPosition;
 
     #endregion
 
@@ -87,15 +91,23 @@ public partial class Player : CharacterBody3D
 
         SetupActionEvents();
 
-        // DEBUG: Create a test held item here
+        // DEBUG: Create a test held shield here
         PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardShield.tscn");
         StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
         AddChild(standardShield);
         standardShield.Reparent(leftHand);
         standardShield.Position = Vector3.Zero;
-        standardShield.Assign(this);
+        standardShield.Assign(this, leftHand);
         heldItems.Item1 = standardShield;
 
+        // DEBUG: Create a test held sword here
+        PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword.tscn");
+        StandardSword standardSword = swordScene.Instantiate<StandardSword>();
+        AddChild(standardSword);
+        standardSword.Reparent(rightHand);
+        standardSword.Position = Vector3.Zero;
+        standardSword.Assign(this, rightHand);
+        heldItems.Item2 = standardSword;
     }
 
     private void SetupActionEvents()

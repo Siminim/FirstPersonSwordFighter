@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccy530sgol0am"]
+
+[ext_resource type="Script" path="res://Scripts/Equipment/Held/StandardSword.cs" id="1_fugnd"]
+
+[node name="StandardSword" type="Node3D"]
+script = ExtResource("1_fugnd")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.775, 0)
+size = Vector3(0.025, 1.3, 0.065)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+size = Vector3(0.075, 0.075, 0.1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+size = Vector3(0.025, 0.175, 0.025)

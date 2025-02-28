@@ -23,11 +23,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 1, -0.75)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.125)
 size = Vector3(0.25, 0.25, 0.25)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="LeftHand/CSGBox3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.776339, 0)
-visible = false
-size = Vector3(0.05, 1.362, 0.15)
-
 [node name="RightHand" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 1, -0.75)
 
