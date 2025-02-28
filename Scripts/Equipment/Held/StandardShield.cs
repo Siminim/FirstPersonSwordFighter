@@ -3,6 +3,23 @@ using System;
 
 public partial class StandardShield : HeldItem
 {
+    MoveAction moveAction;
+
+    private float slowdownDivider = 3.0f;
+    private float GetSlowdownDivider() => slowdownDivider;
+
+
+    public override void Assign(Player player)
+    {
+        base.Assign(player);
+        moveAction = player.actionEventManager[PlayerActionEventType.Move] as MoveAction;
+    }
+
+    public override void OnPressActivate()
+    {
+        moveAction.TopSpeedDivider += GetSlowdownDivider;
+    }
+
     public override void OnHoldActivate(bool state, double delta)
     {
         if (state)
@@ -23,5 +40,10 @@ public partial class StandardShield : HeldItem
             Vector3 rotDiff = Rotation - targetRot;
             Rotation -= rotDiff * (float)delta * 10.0f;
         }
+    }
+
+    public override void OnReleaseActivate()
+    {
+        moveAction.TopSpeedDivider -= GetSlowdownDivider;
     }
 }

@@ -93,7 +93,9 @@ public partial class Player : CharacterBody3D
         AddChild(standardShield);
         standardShield.Reparent(leftHand);
         standardShield.Position = Vector3.Zero;
+        standardShield.Assign(this);
         heldItems.Item1 = standardShield;
+
     }
 
     private void SetupActionEvents()

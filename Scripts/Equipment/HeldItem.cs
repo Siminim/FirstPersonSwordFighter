@@ -3,6 +3,13 @@ using System;
 
 public partial class HeldItem : Node3D
 {
+    protected Player player;
+
+    public virtual void Assign(Player player)
+    {
+        this.player = player;
+    }
+
     public virtual void OnEquip()
     {
 

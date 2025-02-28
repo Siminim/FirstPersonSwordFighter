@@ -5,8 +5,8 @@ public class CameraBobEvent : PlayerActionEvent
 {
     private Vector3 baseCameraTargetPosition = Vector3.Zero;
 
-    private readonly float headBobSpeed = 20.0f;
-    private readonly float headBobDistance = 0.06f;
+    private readonly float headBobSpeed = 16.0f;
+    private readonly float headBobDistance = 0.035f;
     private float headBobTimer = 0.0f;
 
     private readonly float headRollAmount = 0.05f;
