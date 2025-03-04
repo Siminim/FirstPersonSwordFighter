@@ -12,9 +12,6 @@ public partial class StandardSword : HeldItem
     // Stats
     private float slowDownDivider = 5.0f;
 
-    // Variables
-    private bool swinging = false;
-
 
     public override void _Ready()
     {
@@ -29,13 +26,12 @@ public partial class StandardSword : HeldItem
 
     public override void OnEquip()
     {
-        moveAction.TopSpeedDivider += GetSlowdownDivider;
+        moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        moveAction.TopSpeedDivider -= GetSlowdownDivider;
-        swinging = false;
+        moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
     }
 
     public override void OnPressActivate()

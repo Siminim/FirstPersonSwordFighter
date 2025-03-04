@@ -34,12 +34,12 @@ public partial class StandardShield : HeldItem
 
     public override void OnEquip()
     {
-        moveAction.TopSpeedDivider += GetSlowdownDivider;
+        moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        moveAction.TopSpeedDivider -= GetSlowdownDivider;
+        moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
         shieldRaised = false;
     }
 

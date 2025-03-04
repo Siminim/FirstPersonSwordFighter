@@ -5,23 +5,23 @@ public partial class Player : CharacterBody3D
 {
     #region ActionEvent Delegates
 
-    public event Delegates.VoidDelegate OnPause;
+    public Delegates.VoidDelegate OnPause;
 
-    public event Delegates.Vector2DoubleParameterDelegate OnMove;
-    public event Delegates.MouseMotionDelegate OnMouseLook;
-    public event Delegates.Vector2DoubleParameterDelegate OnControllerLook;
+    public Delegates.Vector2DoubleParameterDelegate OnMove;
+    public Delegates.MouseMotionDelegate OnMouseLook;
+    public Delegates.Vector2DoubleParameterDelegate OnControllerLook;
 
-    public event Delegates.VoidDelegate OnJumpPressed;
-    public event Delegates.VoidDelegate OnDash;
-    public event Delegates.VoidDelegate OnInteract;
-    public event Delegates.VoidDelegate OnActivateHeldItem;
-    public event Delegates.VoidDelegate OnActivatePotionEffect;
+    public Delegates.VoidDelegate OnJumpPressed;
+    public Delegates.VoidDelegate OnDash;
+    public Delegates.VoidDelegate OnInteract;
+    public Delegates.VoidDelegate OnActivateHeldItem;
+    public Delegates.VoidDelegate OnActivatePotionEffect;
 
-    public event Delegates.VoidDelegate OnLand;
-    public event Delegates.VoidDelegate OnAirtimeStart;
-    public event Delegates.DoubleParameterDelegate WhileOnGround;
-    public event Delegates.DoubleParameterDelegate WhileInAir;
-    public event Delegates.Node3DParameterDelegate OnLookAtItemChange;
+    public Delegates.VoidDelegate OnLand;
+    public Delegates.VoidDelegate OnAirtimeStart;
+    public Delegates.DoubleParameterDelegate WhileOnGround;
+    public Delegates.DoubleParameterDelegate WhileInAir;
+    public Delegates.Node3DParameterDelegate OnLookAtItemChange;
 
     #endregion
 
@@ -44,30 +44,10 @@ public partial class Player : CharacterBody3D
 
     #region Player Settings and Variables
 
-    // Player Controls
-    private const float MouseSensitivity = 0.00125f;
-
     // Player Settings
-    private float topSpeed = 8.0f;
-
-    private float groundAcceleration = 5.0f;
-    private float groundDeceleration = 2.5f;
-    private float airAcceleration = 2.0f;
-    private float airDeceleration = 1.0f;
-
-    private float friction = 1.5f;
-
-    private float jumpForce = 9.0f;
-    private float maxJumpBuffer = 0.25f;
-
-    private float maxFallSpeed = 60.0f;
-
     private float massKg = 80.0f;
 
     // Player Setting States
-    private Vector3 localMovementVector = Vector3.Zero;
-    private bool jumpPressed = false;
-    private float timeSinceJumpPressed = 0.0f;
     private bool previouslyOnGround = false;
 
     #endregion

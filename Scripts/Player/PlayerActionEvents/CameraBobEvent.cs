@@ -46,7 +46,7 @@ public class CameraBobEvent : PlayerActionEvent
 
     private void HeadRoll(double delta)
     {
-        float sideVelocity = player.Velocity.Dot(GameManager.GetPlayerCamera.Basis * Vector3.Right) / moveAction.GetTotalTopSpeed();
+        float sideVelocity = player.Velocity.Dot(GameManager.GetPlayerCamera.Basis * Vector3.Right) / moveAction.TopSpeedModifiers.GetSafeFinalModifier();
 
         if (!player.IsOnFloor() || (sideVelocity < 0.15f && sideVelocity > -0.15f))
             headRollTarget = 0.0f;

@@ -4,11 +4,8 @@ public class JumpAction : PlayerActionEvent
 {
     //public event Delegates.VoidDelegate Jumped;
 
-    public event Delegates.FloatReturnDelegate JumpForceAdditive;
-    public event Delegates.FloatReturnDelegate JumpForceMultipliers;
-    public event Delegates.FloatReturnDelegate JumpForceDividers;
-
-    public event Delegates.VoidDelegate JumpStopperDelegate;
+    public FloatReturnDelegateModifiers JumpForceModifiers;
+    public Delegates.VoidDelegate JumpStopperDelegate;
 
     private bool jumpPressed = false;
     static float jumpForce = 8.5f;
@@ -22,11 +19,20 @@ public class JumpAction : PlayerActionEvent
     private float coyoteTimeLimit = 0.3f;
 
     private float GetDefaultJumpForce() => jumpForce;
+    private bool CanJump()
+    {
+        if (JumpStopperDelegate == null || JumpStopperDelegate.GetInvocationList().Length == 0)
+            return true;
+
+        return false;
+    }
+
+    // ---------------------------------------------------------------------------
 
     public override void OnEffectApplied(Player player)
     {
         base.OnEffectApplied(player);
-        JumpForceAdditive += GetDefaultJumpForce;
+        JumpForceModifiers.Additive += GetDefaultJumpForce;
         player.OnJumpPressed += JumpButton;
         player.OnLand += ResetCoyoteTime;
         player.WhileInAir += WhileInAir;
@@ -39,7 +45,7 @@ public class JumpAction : PlayerActionEvent
 
     public override void OnEffectRemoved()
     {
-        JumpForceAdditive -= GetDefaultJumpForce;
+        JumpForceModifiers.Additive -= GetDefaultJumpForce;
         player.OnJumpPressed -= JumpButton;
         player.OnLand -= ResetCoyoteTime;
         player.WhileInAir -= WhileInAir;
@@ -60,7 +66,7 @@ public class JumpAction : PlayerActionEvent
     {
         if (jumpPressed && (player.IsOnFloor() || coyoteTimer < coyoteTimeLimit) && player.Velocity.Y <= 0.0f)
         {
-            player.Velocity += new Vector3(0, GetTotalJumpForce(), 0);
+            player.Velocity += new Vector3(0, JumpForceModifiers.GetSafeFinalModifier(), 0);
 
             jumpPressed = false;
             coyoteTimer = coyoteTimeLimit;
@@ -88,63 +94,5 @@ public class JumpAction : PlayerActionEvent
 
         if (player.Velocity.Y > 0.0f && Input.IsActionJustReleased("Jump"))
             player.Velocity += player.GetGravity().Normalized() * jumpDecay;
-    }
-
-    private float GetTotalJumpForce()
-    {
-        return GetJumpForceAdditive() * GetJumpForceMultiplier() / GetJumpForceDivider();
-    }
-
-    private float GetJumpForceAdditive()
-    {
-        if (JumpForceAdditive == null || JumpForceAdditive.GetInvocationList().Length == 0)
-            return 0.0f;
-
-        float jf = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate jumpForceDelegate in JumpForceAdditive.GetInvocationList())
-        {
-            jf += jumpForceDelegate.Invoke();
-        }
-
-        return jf;
-    }
-
-    private float GetJumpForceMultiplier()
-    {
-        if (JumpForceMultipliers == null || JumpForceMultipliers.GetInvocationList().Length == 0)
-            return 1.0f;
-
-        float jf = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate jumpForceDelegate in JumpForceMultipliers.GetInvocationList())
-        {
-            jf += jumpForceDelegate.Invoke();
-        }
-
-        return jf;
-    }
-
-    private float GetJumpForceDivider()
-    {
-        if (JumpForceDividers == null || JumpForceDividers.GetInvocationList().Length == 0)
-            return 1.0f;
-
-        float jf = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate jumpForceDelegate in JumpForceDividers.GetInvocationList())
-        {
-            jf += jumpForceDelegate.Invoke();
-        }
-
-        return jf;
-    }
-
-    private bool CanJump()
-    {
-        if (JumpStopperDelegate == null || JumpStopperDelegate.GetInvocationList().Length == 0)
-            return true;
-
-        return false;
     }
 }

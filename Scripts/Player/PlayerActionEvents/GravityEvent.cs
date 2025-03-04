@@ -3,7 +3,7 @@ using System;
 
 public class GravityEvent : PlayerActionEvent
 {
-    public Delegates.FloatReturnDelegate IncreaseGravityDelegate;
+    public FloatReturnDelegateModifiers GravityModifiers;
 
     private float maxFallVelocity = -58.8f;
     private float fastFallBoost = 6.5f;
@@ -11,32 +11,29 @@ public class GravityEvent : PlayerActionEvent
     public override void OnEffectApplied(Player player)
     {
         base.OnEffectApplied(player);
+        GravityModifiers.Additive += GetGravitySpeed;
         player.WhileInAir += Gravity;
     }
 
     public override void OnEffectRemoved()
     {
+        GravityModifiers.Additive -= GetGravitySpeed;
         player.WhileInAir -= Gravity;
     }
 
-    private float GravityMultipliers()
+    private float GetGravitySpeed()
     {
-        if (IncreaseGravityDelegate == null || IncreaseGravityDelegate.GetInvocationList().Length == 0)
-            return 1.0f;
+        return player.GetGravity().Length();
+    }
 
-        float gravity = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate increaseGravityDelegate in IncreaseGravityDelegate.GetInvocationList())
-        {
-            gravity += increaseGravityDelegate.Invoke();
-        }
-
-        return gravity;
+    private Vector3 GetGravityDirection()
+    {
+        return player.GetGravity().Normalized();
     }
 
     private void Gravity(double delta)
     {
-        player.Velocity += player.GetGravity() * GravityMultipliers() * (float)delta;
+        player.Velocity += GetGravityDirection() * GravityModifiers.GetSafeFinalModifier() * (float)delta;
 
         if (player.Velocity.Y <= 0.0f)
             player.Velocity += player.GetGravity().Normalized() * fastFallBoost * (float)delta;

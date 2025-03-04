@@ -3,8 +3,7 @@ using System;
 
 public class MoveAction : PlayerActionEvent
 {
-    public Delegates.FloatReturnDelegate TopSpeedAdditive;
-    public Delegates.FloatReturnDelegate TopSpeedDivider;
+    public FloatReturnDelegateModifiers TopSpeedModifiers;
 
     private float groundAcceleration = 5.0f;
     private float airAcceleration = 0.8f;
@@ -15,53 +14,20 @@ public class MoveAction : PlayerActionEvent
 
     private float GetDefaultTopSpeed() => topSpeed;
 
+    // -------------------------------------------------------------------
+
     public override void OnEffectApplied(Player player)
     {
         base.OnEffectApplied(player);
 
         player.OnMove += MovementAction;
-        TopSpeedAdditive += GetDefaultTopSpeed;
+        TopSpeedModifiers.Additive += GetDefaultTopSpeed;
     }
 
     public override void OnEffectRemoved()
     {
         player.OnMove -= MovementAction;
-        TopSpeedAdditive -= GetDefaultTopSpeed;
-    }
-
-    public float GetTotalTopSpeed()
-    {
-        return GetAdditiveTopSpeed() / GetTopSpeedDivider();
-    }
-
-    private float GetAdditiveTopSpeed()
-    {
-        if (TopSpeedAdditive == null || TopSpeedAdditive.GetInvocationList().Length == 0)
-            return 0.0f;
-
-        float speed = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate topSpeedDelegate in TopSpeedAdditive.GetInvocationList())
-        {
-            speed += topSpeedDelegate.Invoke();
-        }
-
-        return speed;
-    }
-
-    private float GetTopSpeedDivider()
-    {
-        if (TopSpeedDivider == null || TopSpeedDivider.GetInvocationList().Length == 0)
-            return 1.0f;
-
-        float speed = 0.0f;
-
-        foreach (Delegates.FloatReturnDelegate topSpeedDelegate in TopSpeedDivider.GetInvocationList())
-        {
-            speed += topSpeedDelegate.Invoke();
-        }
-
-        return speed;
+        TopSpeedModifiers.Additive -= GetDefaultTopSpeed;
     }
 
     private void MovementAction(Vector2 inputDir, double delta)
@@ -73,7 +39,7 @@ public class MoveAction : PlayerActionEvent
         }
 
         localMovementVector = (GameManager.GetPlayerCamera.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-        Vector3 targetVelocity = localMovementVector * GetTotalTopSpeed();
+        Vector3 targetVelocity = localMovementVector * TopSpeedModifiers.GetSafeFinalModifier();
 
         float xBooster = 1.0f;
         float zBooster = 1.0f;
