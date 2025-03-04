@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bglar034f85km"]
+
+[ext_resource type="Script" uid="uid://bmjp4orhss862" path="res://Scripts/Character/Player.cs" id="1_cuasa"]
+[ext_resource type="PackedScene" uid="uid://b3qvrcxvkf4yv" path="res://Object-Collections/Character/DefaultCharacter.tscn" id="1_vprkb"]
+
+[node name="Character" instance=ExtResource("1_vprkb")]
+script = ExtResource("1_cuasa")
