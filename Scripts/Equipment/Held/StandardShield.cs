@@ -3,7 +3,7 @@ using System;
 
 public partial class StandardShield : HeldItem
 {
-    MoveAction moveAction;
+    //MoveAction moveAction;
 
     private Vector3 defaultPosition;
     private Vector3 raisedPosition;
@@ -13,10 +13,10 @@ public partial class StandardShield : HeldItem
 
     private bool shieldRaised = false;
 
-    public override void Assign(Player player, Node3D hand)
+    public override void Assign(Character player, Node3D hand)
     {
         base.Assign(player, hand);
-        moveAction = player.actionEventManager[PlayerActionEventType.Move] as MoveAction;
+        //moveAction = player.actionEventManager[CharacterActionEventType.Move] as MoveAction;
 
         if (hand == player.LeftHand)
         {
@@ -34,12 +34,12 @@ public partial class StandardShield : HeldItem
 
     public override void OnEquip()
     {
-        moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
+        //moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
+        //moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
         shieldRaised = false;
     }
 

@@ -3,10 +3,10 @@ using System;
 
 public partial class HeldItem : Node3D
 {
-    protected Player player;
+    protected Character player;
     protected Node3D hand;
 
-    public virtual void Assign(Player player, Node3D hand)
+    public virtual void Assign(Character player, Node3D hand)
     {
         this.player = player;
         this.hand = hand;

@@ -5,6 +5,7 @@ public partial class GameManager : Node
 {
     static private Player player;
     static public Player GetPlayer => player;
+
     static private PlayerCamera playerCamera;
     static public PlayerCamera GetPlayerCamera => playerCamera;
 
@@ -18,6 +19,7 @@ public partial class GameManager : Node
         Input.SetMouseMode(Input.MouseModeEnum.Captured);
 
         player = PlayerScene.Instantiate<Player>();
+        player.Position = new Vector3(0.0f, 5.0f, 0.0f);
         AddChild(player);
 
         playerCamera = PlayerCameraScene.Instantiate<PlayerCamera>();

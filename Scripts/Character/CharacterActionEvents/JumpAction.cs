@@ -1,6 +1,6 @@
 using Godot;
 
-public class JumpAction : PlayerActionEvent
+public class JumpAction : CharacterActionEvent
 {
     //public event Delegates.VoidDelegate Jumped;
 
@@ -29,13 +29,13 @@ public class JumpAction : PlayerActionEvent
 
     // ---------------------------------------------------------------------------
 
-    public override void OnEffectApplied(Player player)
+    public override void OnEffectApplied(Character player)
     {
         base.OnEffectApplied(player);
         JumpForceModifiers.Additive += GetDefaultJumpForce;
-        player.OnJumpPressed += JumpButton;
-        player.OnLand += ResetCoyoteTime;
-        player.WhileInAir += WhileInAir;
+        // player.OnJumpPressed += JumpButton;
+        // player.OnLand += ResetCoyoteTime;
+        // player.WhileInAir += WhileInAir;
     }
 
     public override void OnEffectPhysicsProcess(double delta)
@@ -46,9 +46,9 @@ public class JumpAction : PlayerActionEvent
     public override void OnEffectRemoved()
     {
         JumpForceModifiers.Additive -= GetDefaultJumpForce;
-        player.OnJumpPressed -= JumpButton;
-        player.OnLand -= ResetCoyoteTime;
-        player.WhileInAir -= WhileInAir;
+        // character.OnJumpPressed -= JumpButton;
+        // character.OnLand -= ResetCoyoteTime;
+        // character.WhileInAir -= WhileInAir;
     }
 
     private void JumpButton()
@@ -64,9 +64,9 @@ public class JumpAction : PlayerActionEvent
 
     private void Jump(double delta)
     {
-        if (jumpPressed && (player.IsOnFloor() || coyoteTimer < coyoteTimeLimit) && player.Velocity.Y <= 0.0f)
+        if (jumpPressed && (character.IsOnFloor() || coyoteTimer < coyoteTimeLimit) && character.Velocity.Y <= 0.0f)
         {
-            player.Velocity += new Vector3(0, JumpForceModifiers.GetSafeFinalModifier(), 0);
+            character.Velocity += new Vector3(0, JumpForceModifiers.GetSafeFinalModifier(), 0);
 
             jumpPressed = false;
             coyoteTimer = coyoteTimeLimit;
@@ -92,7 +92,7 @@ public class JumpAction : PlayerActionEvent
     {
         coyoteTimer += (float)delta;
 
-        if (player.Velocity.Y > 0.0f && Input.IsActionJustReleased("Jump"))
-            player.Velocity += player.GetGravity().Normalized() * jumpDecay;
+        if (character.Velocity.Y > 0.0f && Input.IsActionJustReleased("Jump"))
+            character.Velocity += character.GetGravity().Normalized() * jumpDecay;
     }
 }

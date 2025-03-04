@@ -5,7 +5,7 @@ public partial class StandardSword : HeldItem
 {
 
     // References
-    private MoveAction moveAction;
+    //private MoveAction moveAction;
 
     private AnimationPlayer animationPlayer;
 
@@ -18,20 +18,20 @@ public partial class StandardSword : HeldItem
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
-    public override void Assign(Player player, Node3D hand)
+    public override void Assign(Character character, Node3D hand)
     {
-        base.Assign(player, hand);
-        moveAction = player.actionEventManager[PlayerActionEventType.Move] as MoveAction;
+        base.Assign(character, hand);
+        //moveAction = character.actionEventManager[CharacterActionEventType.Move] as MoveAction;
     }
 
     public override void OnEquip()
     {
-        moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
+        //moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
+        //moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
     }
 
     public override void OnPressActivate()

@@ -1,10 +1,10 @@
-public class PlayerActionEvent
+public class CharacterActionEvent
 {
-    protected Player player;
+    protected Character character;
 
-    public virtual void OnEffectApplied(Player player)
+    public virtual void OnEffectApplied(Character character)
     {
-        this.player = player;
+        this.character = character;
     }
 
     public virtual void OnEffectProcess(double delta) { }

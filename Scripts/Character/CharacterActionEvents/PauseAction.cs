@@ -1,12 +1,12 @@
 using Godot;
 using System;
 
-public class PauseAction : PlayerActionEvent
+public class PauseAction : CharacterActionEvent
 {
     //PackedScene pauseMenu = ResourceLoader.Load<PackedScene>("res://UserInterface/PauseMenu/PauseMenu.tscn");
     //public PauseMenu pauseMenuInstance;
 
-    public override void OnEffectApplied(Player player)
+    public override void OnEffectApplied(Character player)
     {
         base.OnEffectApplied(player);
         CreatePauseMenu();

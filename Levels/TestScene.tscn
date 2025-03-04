@@ -1,7 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://ne154penjf52"]
+[gd_scene load_steps=4 format=3 uid="uid://ne154penjf52"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8syn"]
 albedo_color = Color(0.377883, 0.428699, 0.238642, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5exg5"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6m7py"]
+size = Vector3(0.5, 0.5, 0.5)
 
 [node name="Level" type="Node3D"]
 
@@ -25,3 +31,13 @@ size = Vector3(3.52356, 0.321655, 6.78223)
 transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 5.03972, 1.39279, -7.73655)
 use_collision = true
 size = Vector3(3.52356, 0.300293, 6.78223)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.4955, 0)
+mass = 0.25
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_5exg5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_6m7py")
