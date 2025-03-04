@@ -76,6 +76,7 @@ public partial class Player : Character
     {
         CameraBob(delta);
         MovementAction(delta);
+        JumpAction();
         RotateBodyToCamera(delta);
         base._PhysicsProcess(delta);
     }
@@ -125,6 +126,15 @@ public partial class Player : Character
         playerCamera.Camera.Rotation = new Vector3(x, playerCamera.Camera.Rotation.Y, playerCamera.Camera.Rotation.Z);
     }
 
+    private void JumpAction()
+    {
+        if (Input.IsActionPressed("Jump"))
+            QueueJump();
+        
+        if (Input.IsActionJustReleased("Jump"))
+            EndJumpEarly();
+    }
+
     // ----------------------------------------------------------------------------------
     // ------------------------------- Other Functions ----------------------------------
     // ---------------------------------------------------------------------------------- 
@@ -166,16 +176,6 @@ public partial class Player : Character
         GameManager.GetPlayerCamera.Rotation = GameManager.GetPlayerCamera.Rotation.Lerp(new Vector3(cameraV.X, cameraV.Y, headRollTarget), (float)delta);
     }
 
-    // private void PollActions(double delta)
-    // {
-    //     PauseAction();
-
-    //     LookControllerAction(delta);
-    //     MovementAction(delta);
-    //     JumpAction();
-
-    //     HeldItems(delta);
-    // }
 
     // private void HeldItems(double delta)
     // {

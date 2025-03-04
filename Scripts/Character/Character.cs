@@ -53,37 +53,75 @@ public partial class Character : CharacterBody3D
 
     #endregion
 
-    // ------------------------------------------
+    #region Jump Variables
 
-    // Variables
-    public CharacterActionEventManager actionEventManager = new CharacterActionEventManager();
-    public (HeldItem, HeldItem) heldItems = (null, null);
+    public FloatReturnDelegateModifiers JumpForceModifiers;
+    public Delegates.VoidDelegate DisableJumpDelegate;
 
-    // Player Settings
+    private bool queuedJump = false;
+    private float jumpForce = 8.5f;
+
+    private float timeSinceQueuedJump = 0.0f;
+    private float jumpBuffer = 0.175f;
+
+    private float jumpDecay = 2.0f;
+
+    private float coyoteTimer = 0.0f;
+    private float coyoteTimeLimit = 0.3f;
+
+    private float GetDefaultJumpForce() => jumpForce;
+    private bool CanJump()
+    {
+        if (DisableJumpDelegate == null || DisableJumpDelegate.GetInvocationList().Length == 0)
+            return true;
+
+        return false;
+    }
+
+    #endregion
+
+    #region Push Objects Variables
+
     protected float massKg = 80.0f;
     public float MassKg => massKg;
 
-    // Player Setting States
+    #endregion
+
+    #region Ground Condition Variables
+
     protected bool previouslyOnGround = false;
 
-    // ------------------------------------------
+    #endregion
+
+    private HeldItem leftHandItem = null;
+    private HeldItem rightHandItem = null;
+
+    // ----------------------------------------------------------------------------------
+    // -------------------------- Default Godot Functions -------------------------------
+    // ---------------------------------------------------------------------------------- 
 
     public override void _EnterTree()
     {
         GravityModifiers.Additive += GetGravitySpeed;
         TopSpeedModifiers.Additive += GetDefaultTopSpeed;
+        JumpForceModifiers.Additive += GetDefaultJumpForce;
         
         WhileInAir += ApplyGravity;
+        WhileInAir += CoyoteTimeCounter;
         WhileOnGround += ApplyFriction;
+        OnLand += ResetCoyoteTimeCounter;
     }
 
     public override void _ExitTree()
     {
         GravityModifiers.Additive -= GetGravitySpeed;
         TopSpeedModifiers.Additive -= GetDefaultTopSpeed;
+        JumpForceModifiers.Additive -= GetDefaultJumpForce;
         
         WhileInAir -= ApplyGravity;
+        WhileInAir -= CoyoteTimeCounter;
         WhileOnGround -= ApplyFriction;
+        OnLand -= ResetCoyoteTimeCounter;
     }
 
     public override void _Ready()
@@ -93,8 +131,6 @@ public partial class Character : CharacterBody3D
 
         leftHandDefaultPosition = leftHand.Position;
         rightHandDefaultPosition = rightHand.Position;
-
-        //SetupActionEvents();
     }
 
     public override void _Process(double delta)
@@ -106,6 +142,7 @@ public partial class Character : CharacterBody3D
     {
         PushObjects();
         GroundAndAirEvents(delta);
+        Jump(delta);
         MoveAndSlide();
     }
 
@@ -157,6 +194,20 @@ public partial class Character : CharacterBody3D
         }
     }
 
+    private void Jump(double delta)
+    {
+        if (queuedJump && (IsOnFloor() || coyoteTimer < coyoteTimeLimit) && Velocity.Y <= 0.0f)
+        {
+            Velocity += new Vector3(0, JumpForceModifiers.GetSafeFinalModifier(), 0);
+            queuedJump = false;
+            coyoteTimer += coyoteTimeLimit;
+        }
+
+        timeSinceQueuedJump += (float)delta;
+        if (timeSinceQueuedJump >= jumpBuffer)
+            queuedJump = false;
+    }
+
     // ------------------------------------------------------------
     // ------------------ Called by Delegates ---------------------
     // ------------------------------------------------------------
@@ -183,6 +234,16 @@ public partial class Character : CharacterBody3D
 
         if (Velocity.Length() < 0.5f)
             Velocity = Vector3.Zero;
+    }
+
+    private void CoyoteTimeCounter(double delta)
+    {
+        coyoteTimer += (float)delta;
+    }
+
+    private void ResetCoyoteTimeCounter()
+    {
+        coyoteTimer = 0.0f;
     }
 
     // ------------------------------------------------------------
@@ -236,15 +297,22 @@ public partial class Character : CharacterBody3D
         Rotation += rotationDiff * (float)delta * 10.0f;
     }
 
+    protected void QueueJump()
+    {
+        timeSinceQueuedJump = 0.0f;
 
-    // protected virtual void SetupActionEvents()
-    // {
-    //     actionEventManager.AddAction(this, CharacterActionEventType.Move);
-    //     actionEventManager.AddAction(this, CharacterActionEventType.Jump);
-    //     actionEventManager.AddAction(this, CharacterActionEventType.RotateBody);
+        if (CanJump())
+            queuedJump = true;
+    }
 
-    //     actionEventManager.AddAction(this, CharacterActionEventType.PushObjects);
-    //     actionEventManager.AddAction(this, CharacterActionEventType.Friction);
-    //     actionEventManager.AddAction(this, CharacterActionEventType.Gravity);
-    // }
+    protected void EndJumpEarly()
+    {
+        if (Velocity.Y <= 0.0f)
+            return;
+
+        float velocityMod = Velocity.Y * 0.25f;
+        Velocity += GetGravityDirection() * velocityMod * jumpDecay;
+    }
+
+
 }
