@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvb6inea7gmcv"]
 
-[ext_resource type="Script" path="res://Scripts/Equipment/Held/StandardShield.cs" id="1_8wbnb"]
+[ext_resource type="Script" uid="uid://x188kiu04lml" path="res://Scripts/Equipment/Held/StandardShield.cs" id="1_8wbnb"]
 
 [node name="StandardShield" type="Node3D"]
 script = ExtResource("1_8wbnb")

@@ -10,7 +10,8 @@ public partial class StandardShield : HeldItem
     private Vector3 raisedRotation;
 
     private float slowdownDivider = 3.0f;
-    private float GetSlowdownDivider() => slowdownDivider;
+
+    private bool shieldRaised = false;
 
     public override void Assign(Player player, Node3D hand)
     {
@@ -31,12 +32,23 @@ public partial class StandardShield : HeldItem
         }
     }
 
-    public override void OnPressActivate()
+    public override void OnEquip()
     {
         moveAction.TopSpeedDivider += GetSlowdownDivider;
     }
 
-    public override void OnHoldActivate(bool state, double delta)
+    public override void OnUnequip()
+    {
+        moveAction.TopSpeedDivider -= GetSlowdownDivider;
+        shieldRaised = false;
+    }
+
+    public override void OnPressActivate()
+    {
+        shieldRaised = true;
+    }
+
+    public override void OnUpdate(bool state, double delta)
     {
         if (state)
         {
@@ -59,6 +71,14 @@ public partial class StandardShield : HeldItem
 
     public override void OnReleaseActivate()
     {
-        moveAction.TopSpeedDivider -= GetSlowdownDivider;
+        shieldRaised = false;
+    }
+
+    private float GetSlowdownDivider()
+    {
+        if (shieldRaised)
+            return slowdownDivider;
+        
+        return 1.0f;
     }
 }

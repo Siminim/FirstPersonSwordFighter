@@ -91,23 +91,8 @@ public partial class Player : CharacterBody3D
 
         SetupActionEvents();
 
-        // DEBUG: Create a test held shield here
-        PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardShield.tscn");
-        StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
-        AddChild(standardShield);
-        standardShield.Reparent(leftHand);
-        standardShield.Position = Vector3.Zero;
-        standardShield.Assign(this, leftHand);
-        heldItems.Item1 = standardShield;
-
-        // DEBUG: Create a test held sword here
-        PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword.tscn");
-        StandardSword standardSword = swordScene.Instantiate<StandardSword>();
-        AddChild(standardSword);
-        standardSword.Reparent(rightHand);
-        standardSword.Position = Vector3.Zero;
-        standardSword.Assign(this, rightHand);
-        heldItems.Item2 = standardSword;
+        EquipLeftHand(heldItems.Item1);
+        EquipRightHand(heldItems.Item2);
     }
 
     private void SetupActionEvents()
@@ -225,7 +210,7 @@ public partial class Player : CharacterBody3D
                 heldItems.Item1.OnPressActivate();
 
             bool leftHandActive = Input.IsActionPressed("ActivateLeftHand");
-            heldItems.Item1.OnHoldActivate(leftHandActive, delta);
+            heldItems.Item1.OnUpdate(leftHandActive, delta);
 
             if (Input.IsActionJustReleased("ActivateLeftHand"))
                 heldItems.Item1.OnReleaseActivate();
@@ -237,14 +222,12 @@ public partial class Player : CharacterBody3D
                 heldItems.Item2.OnPressActivate();
 
             bool rightHandActive = Input.IsActionPressed("ActivateRightHand");
-            heldItems.Item2.OnHoldActivate(rightHandActive, delta);
+            heldItems.Item2.OnUpdate(rightHandActive, delta);
 
             if (Input.IsActionJustReleased("ActivateRightHand"))
                 heldItems.Item2.OnReleaseActivate();
         }
     }
-
-
 
     //  ----------------------------------------------------------------------------------
     //  ------------------------------ Personal Functions --------------------------------
@@ -289,6 +272,30 @@ public partial class Player : CharacterBody3D
                 rigidBody.ApplyImpulse(pushDirection * deltaVelocity * pushForce, collision.GetPosition() - rigidBody.GlobalPosition);
             }
         }
+    }
+
+    private void EquipLeftHand(HeldItem heldItem)
+    {
+        PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/Shield/StandardShield.tscn");
+        StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
+        AddChild(standardShield);
+        standardShield.Reparent(leftHand);
+        standardShield.Position = Vector3.Zero;
+        standardShield.Assign(this, leftHand);
+        heldItems.Item1 = standardShield;
+        heldItems.Item1.OnEquip();
+    }
+
+    private void EquipRightHand(HeldItem heldItem)
+    {
+        PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword/StandardSword.tscn");
+        StandardSword standardSword = swordScene.Instantiate<StandardSword>();
+        AddChild(standardSword);
+        standardSword.Reparent(rightHand);
+        standardSword.Position = Vector3.Zero;
+        standardSword.Assign(this, rightHand);
+        heldItems.Item2 = standardSword;
+        heldItems.Item2.OnEquip();
     }
 
 }

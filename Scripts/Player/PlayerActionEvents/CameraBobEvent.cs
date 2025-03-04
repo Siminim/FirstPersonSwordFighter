@@ -35,7 +35,8 @@ public class CameraBobEvent : PlayerActionEvent
         }
         else
         {
-            float velocityPercent = player.Velocity.Length() / moveAction.GetTotalTopSpeed();
+            //float velocityPercent = player.Velocity.Length() / moveAction.GetTotalTopSpeed();
+            float velocityPercent = player.Velocity.Length() / 4.0f;
             headBobTimer += headBobSpeed * (float)delta * velocityPercent;
         }
 

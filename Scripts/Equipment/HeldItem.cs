@@ -27,7 +27,7 @@ public partial class HeldItem : Node3D
         
     }
 
-    public virtual void OnHoldActivate(bool state, double delta)
+    public virtual void OnUpdate(bool state, double delta)
     {
         
     }

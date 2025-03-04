@@ -12,14 +12,13 @@ config_version=5
 
 config/name="FirstPersonSwordFighter"
 run/main_scene="res://Levels/TestScene.tscn"
-config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameManager="*res://Scripts/Managers/GameManager.cs"
-RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 
 [display]
 
@@ -31,7 +30,7 @@ project/assembly_name="FirstPersonSwordFighter"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/runtime_debug_tools/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 
@@ -115,4 +114,5 @@ Pause={
 
 [physics]
 
+3d/physics_engine="Jolt Physics"
 3d/default_gravity=25.0
