@@ -25,7 +25,7 @@ public partial class Character : CharacterBody3D
     #region Gravity Variables
 
     public FloatReturnDelegateModifiers GravityModifiers;
-    
+
     private float maxFallVelocity = -58.8f;
 
     private float GetGravitySpeed() => GetGravity().Length();
@@ -105,7 +105,7 @@ public partial class Character : CharacterBody3D
         GravityModifiers.Additive += GetGravitySpeed;
         TopSpeedModifiers.Additive += GetDefaultTopSpeed;
         JumpForceModifiers.Additive += GetDefaultJumpForce;
-        
+
         WhileInAir += ApplyGravity;
         WhileInAir += CoyoteTimeCounter;
         WhileOnGround += ApplyFriction;
@@ -117,7 +117,7 @@ public partial class Character : CharacterBody3D
         GravityModifiers.Additive -= GetGravitySpeed;
         TopSpeedModifiers.Additive -= GetDefaultTopSpeed;
         JumpForceModifiers.Additive -= GetDefaultJumpForce;
-        
+
         WhileInAir -= ApplyGravity;
         WhileInAir -= CoyoteTimeCounter;
         WhileOnGround -= ApplyFriction;
@@ -278,7 +278,7 @@ public partial class Character : CharacterBody3D
 
         Velocity += new Vector3(velocityDif.X, 0, velocityDif.Z) * (float)delta;
     }
-    
+
     protected void RotateBody(Vector3 targetRotation, double delta)
     {
         Vector3 colliderRotation = new Vector3(0, Rotation.Y, 0);
@@ -314,5 +314,37 @@ public partial class Character : CharacterBody3D
         Velocity += GetGravityDirection() * velocityMod * jumpDecay;
     }
 
+    protected void EquipInHand(HeldItemSlot slot, HeldItem item)
+    {
+        if (slot == HeldItemSlot.LeftHand)
+        {
+            item.Reparent(leftHand);
+            item.Assign(this, leftHand);
+            leftHandItem = item;
+        }
+        else if (slot == HeldItemSlot.RightHand)
+        {
+            item.Reparent(rightHand);
+            item.Assign(this, rightHand);
+            rightHandItem = item;
+        }
+        item.OnEquip();
+        item.Position = Vector3.Zero;
+    }
 
+    protected void ActivateItemInHand(HeldItemSlot slot)
+    {
+        if (slot == HeldItemSlot.LeftHand && leftHandItem != null)
+            leftHandItem.Activate();
+        else if (slot == HeldItemSlot.RightHand && rightHandItem != null)
+            rightHandItem.Activate();
+    }
+
+    protected void DeactivateItemInHand(HeldItemSlot slot)
+    {
+        if (slot == HeldItemSlot.LeftHand && leftHandItem != null)
+            leftHandItem.Deactivate();
+        else if (slot == HeldItemSlot.RightHand && rightHandItem != null)
+            rightHandItem.Deactivate();
+    }
 }

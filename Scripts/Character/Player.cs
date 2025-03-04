@@ -30,7 +30,7 @@ public partial class Player : Character
 
     private readonly float headBobSpeed = 32.0f;
     private readonly float headBobDistance = 0.035f;
-    
+
     private float headBobTimer = 0.0f;
 
     #endregion
@@ -38,7 +38,7 @@ public partial class Player : Character
     #region Camera Roll Variables
 
     private readonly float headRollAmount = 0.05f;
-    
+
     private float headRollTarget = 0.0f;
 
     #endregion
@@ -65,24 +65,36 @@ public partial class Player : Character
 
     public override void _Ready()
     {
+        base._Ready();
         cameraTarget = GetNode<Node3D>("CameraTarget");
         baseCameraTargetPosition = cameraTarget.Position;
 
-        // EquipLeftHand(heldItems.Item1);
-        // EquipRightHand(heldItems.Item2);
+        PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword/StandardSword.tscn");
+        StandardSword standardSword = swordScene.Instantiate<StandardSword>();
+        AddChild(standardSword);
+
+        PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/Shield/StandardShield.tscn");
+        StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
+        AddChild(standardShield);
+
+        EquipInHand(HeldItemSlot.LeftHand, standardShield);
+        EquipInHand(HeldItemSlot.RightHand, standardSword);
     }
 
     public override void _PhysicsProcess(double delta)
     {
         CameraBob(delta);
+        RotateBodyToCamera(delta);
+
         MovementAction(delta);
         JumpAction();
-        RotateBodyToCamera(delta);
+        PollHeldItemActions();
+
         base._PhysicsProcess(delta);
     }
 
     public override void _Input(InputEvent @event)
-    { 
+    {
         LookMouseAction(@event);
     }
 
@@ -130,9 +142,22 @@ public partial class Player : Character
     {
         if (Input.IsActionPressed("Jump"))
             QueueJump();
-        
+
         if (Input.IsActionJustReleased("Jump"))
             EndJumpEarly();
+    }
+
+    private void PollHeldItemActions()
+    {
+        if (Input.IsActionJustPressed("ActivateLeftHand"))
+            ActivateItemInHand(HeldItemSlot.LeftHand);
+        else if (Input.IsActionJustReleased("ActivateLeftHand"))
+            DeactivateItemInHand(HeldItemSlot.LeftHand);
+
+        if (Input.IsActionJustPressed("ActivateRightHand"))
+            ActivateItemInHand(HeldItemSlot.RightHand);
+        else if (Input.IsActionJustReleased("ActivateRightHand"))
+            DeactivateItemInHand(HeldItemSlot.RightHand);
     }
 
     // ----------------------------------------------------------------------------------
@@ -203,30 +228,4 @@ public partial class Player : Character
     //             heldItems.Item2.OnReleaseActivate();
     //     }
     // }
-
-    // private void EquipLeftHand(HeldItem heldItem)
-    // {
-    //     PackedScene shieldScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/Shield/StandardShield.tscn");
-    //     StandardShield standardShield = shieldScene.Instantiate<StandardShield>();
-    //     AddChild(standardShield);
-    //     standardShield.Reparent(leftHand);
-    //     standardShield.Position = Vector3.Zero;
-    //     standardShield.Assign(this, leftHand);
-    //     heldItems.Item1 = standardShield;
-    //     heldItems.Item1.OnEquip();
-    // }
-
-    // private void EquipRightHand(HeldItem heldItem)
-    // {
-    //     PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword/StandardSword.tscn");
-    //     StandardSword standardSword = swordScene.Instantiate<StandardSword>();
-    //     AddChild(standardSword);
-    //     standardSword.Reparent(rightHand);
-    //     standardSword.Position = Vector3.Zero;
-    //     standardSword.Assign(this, rightHand);
-    //     heldItems.Item2 = standardSword;
-    //     heldItems.Item2.OnEquip();
-    // }
-
-
 }

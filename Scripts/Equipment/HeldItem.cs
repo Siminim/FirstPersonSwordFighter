@@ -3,12 +3,12 @@ using System;
 
 public partial class HeldItem : Node3D
 {
-    protected Character player;
+    protected Character character;
     protected Node3D hand;
 
-    public virtual void Assign(Character player, Node3D hand)
+    public virtual void Assign(Character character, Node3D hand)
     {
-        this.player = player;
+        this.character = character;
         this.hand = hand;
     }
 
@@ -22,19 +22,20 @@ public partial class HeldItem : Node3D
 
     }
 
-    public virtual void OnPressActivate()
+    public virtual void Activate()
     {
         
     }
 
-    public virtual void OnUpdate(bool state, double delta)
-    {
-        
-    }
-
-    public virtual void OnReleaseActivate()
+    public virtual void Deactivate()
     {
 
     }
 
+}
+
+public enum HeldItemSlot
+{
+    LeftHand,
+    RightHand
 }

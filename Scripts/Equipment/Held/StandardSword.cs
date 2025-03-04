@@ -3,13 +3,8 @@ using System;
 
 public partial class StandardSword : HeldItem
 {
-
-    // References
-    //private MoveAction moveAction;
-
     private AnimationPlayer animationPlayer;
 
-    // Stats
     private float slowDownDivider = 5.0f;
 
 
@@ -21,20 +16,19 @@ public partial class StandardSword : HeldItem
     public override void Assign(Character character, Node3D hand)
     {
         base.Assign(character, hand);
-        //moveAction = character.actionEventManager[CharacterActionEventType.Move] as MoveAction;
     }
 
     public override void OnEquip()
     {
-        //moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
+        character.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        //moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
+        character.TopSpeedModifiers.Divider -= GetSlowdownDivider;
     }
 
-    public override void OnPressActivate()
+    public override void Activate()
     {
         if (animationPlayer.IsPlaying())
             return;

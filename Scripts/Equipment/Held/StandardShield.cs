@@ -3,8 +3,6 @@ using System;
 
 public partial class StandardShield : HeldItem
 {
-    //MoveAction moveAction;
-
     private Vector3 defaultPosition;
     private Vector3 raisedPosition;
     private Vector3 raisedRotation;
@@ -13,20 +11,19 @@ public partial class StandardShield : HeldItem
 
     private bool shieldRaised = false;
 
-    public override void Assign(Character player, Node3D hand)
+    public override void Assign(Character character, Node3D hand)
     {
-        base.Assign(player, hand);
-        //moveAction = player.actionEventManager[CharacterActionEventType.Move] as MoveAction;
+        base.Assign(character, hand);
 
-        if (hand == player.LeftHand)
+        if (hand == character.LeftHand)
         {
-            defaultPosition = player.LeftHandDefaultPosition;
+            defaultPosition = character.LeftHandDefaultPosition;
             raisedPosition = defaultPosition + new Vector3(0.3f, 0.25f, 0.45f);
             raisedRotation = new Vector3(0.0f, 0.0f, Mathf.DegToRad(-8.0f));
         }
         else
         {
-            defaultPosition = player.RightHandDefaultPosition;
+            defaultPosition = character.RightHandDefaultPosition;
             raisedPosition = defaultPosition + new Vector3(-0.3f, 0.25f, 0.45f);
             raisedRotation = new Vector3(0.0f, 0.0f, Mathf.DegToRad(8.0f));
         }
@@ -34,23 +31,23 @@ public partial class StandardShield : HeldItem
 
     public override void OnEquip()
     {
-        //moveAction.TopSpeedModifiers.Divider += GetSlowdownDivider;
+        character.TopSpeedModifiers.Divider += GetSlowdownDivider;
     }
 
     public override void OnUnequip()
     {
-        //moveAction.TopSpeedModifiers.Divider -= GetSlowdownDivider;
+        character.TopSpeedModifiers.Divider -= GetSlowdownDivider;
         shieldRaised = false;
     }
 
-    public override void OnPressActivate()
+    public override void Activate()
     {
         shieldRaised = true;
     }
 
-    public override void OnUpdate(bool state, double delta)
+    public override void _PhysicsProcess(double delta)
     {
-        if (state)
+        if (shieldRaised)
         {
             Vector3 posDiff = hand.Position - raisedPosition;
             hand.Position -= posDiff * (float)delta * 10.0f;
@@ -69,7 +66,7 @@ public partial class StandardShield : HeldItem
         }
     }
 
-    public override void OnReleaseActivate()
+    public override void Deactivate()
     {
         shieldRaised = false;
     }
