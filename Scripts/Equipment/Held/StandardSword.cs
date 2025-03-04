@@ -5,8 +5,8 @@ public partial class StandardSword : HeldItem
 {
     private AnimationPlayer animationPlayer;
 
-    private float slowDownDivider = 5.0f;
-
+    private float moveSpeedDivider = 5.0f;
+    private float rotateSpeedDivider = 5.0f;
 
     public override void _Ready()
     {
@@ -21,11 +21,25 @@ public partial class StandardSword : HeldItem
     public override void OnEquip()
     {
         character.TopSpeedModifiers.Divider += GetSlowdownDivider;
+        character.RotateBodyModifiers.Divider += GetRotateSpeedDivider;
+
+        if (character is Player player)
+        {
+            player.MouseSensitivityModifiers.Divider += GetSlowdownDivider;
+            player.ControllerSensitivityModifiers.Divider += GetSlowdownDivider;
+        }
     }
 
     public override void OnUnequip()
     {
         character.TopSpeedModifiers.Divider -= GetSlowdownDivider;
+        character.RotateBodyModifiers.Divider -= GetRotateSpeedDivider;
+
+        if (character is Player player)
+        {
+            player.MouseSensitivityModifiers.Divider -= GetSlowdownDivider;
+            player.ControllerSensitivityModifiers.Divider -= GetSlowdownDivider;
+        }
     }
 
     public override void Activate()
@@ -39,7 +53,15 @@ public partial class StandardSword : HeldItem
     private float GetSlowdownDivider()
     {
         if (animationPlayer.IsPlaying())
-            return slowDownDivider;
+            return moveSpeedDivider;
+
+        return 1.0f;
+    }
+
+    private float GetRotateSpeedDivider()
+    {
+        if (animationPlayer.IsPlaying())
+            return rotateSpeedDivider;
 
         return 1.0f;
     }

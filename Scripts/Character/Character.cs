@@ -39,6 +39,16 @@ public partial class Character : CharacterBody3D
 
     #endregion
 
+    #region Rotate Body Variables
+
+    public FloatReturnDelegateModifiers RotateBodyModifiers;
+
+    private float rotateBodySpeed = 12.0f;
+
+    private float GetDefaultRotateBodySpeed() => rotateBodySpeed;
+
+    #endregion
+
     #region Movement Variables
 
     public FloatReturnDelegateModifiers TopSpeedModifiers;
@@ -105,6 +115,7 @@ public partial class Character : CharacterBody3D
         GravityModifiers.Additive += GetGravitySpeed;
         TopSpeedModifiers.Additive += GetDefaultTopSpeed;
         JumpForceModifiers.Additive += GetDefaultJumpForce;
+        RotateBodyModifiers.Additive += GetDefaultRotateBodySpeed;
 
         WhileInAir += ApplyGravity;
         WhileInAir += CoyoteTimeCounter;
@@ -117,6 +128,7 @@ public partial class Character : CharacterBody3D
         GravityModifiers.Additive -= GetGravitySpeed;
         TopSpeedModifiers.Additive -= GetDefaultTopSpeed;
         JumpForceModifiers.Additive -= GetDefaultJumpForce;
+        RotateBodyModifiers.Additive -= GetDefaultRotateBodySpeed;
 
         WhileInAir -= ApplyGravity;
         WhileInAir -= CoyoteTimeCounter;
@@ -294,7 +306,7 @@ public partial class Character : CharacterBody3D
                 rotationDiff.Y += max * 2;
         }
 
-        Rotation += rotationDiff * (float)delta * 10.0f;
+        Rotation += rotationDiff * RotateBodyModifiers.GetSafeFinalModifier() * (float)delta;
     }
 
     protected void QueueJump()
