@@ -359,4 +359,14 @@ public partial class Character : CharacterBody3D
         else if (slot == HeldItemSlot.RightHand && rightHandItem != null)
             rightHandItem.Deactivate();
     }
+
+    // ------------------------------------------------------------
+    // ------------------ Use in Other Classes --------------------
+    // ------------------------------------------------------------
+
+    public void ApplyDamage(float damage)
+    {
+        GD.Print($"Character took {damage} damage");
+    }
+
 }

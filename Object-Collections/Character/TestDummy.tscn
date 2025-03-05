@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cckjolnjryhw7"]
+
+[ext_resource type="PackedScene" uid="uid://b3qvrcxvkf4yv" path="res://Object-Collections/Character/DefaultCharacter.tscn" id="1_ungx7"]
+[ext_resource type="Script" uid="uid://cra2nj3mlm4p2" path="res://Scripts/Character/Characters/TestDummy.cs" id="2_1e0cq"]
+
+[node name="Character" instance=ExtResource("1_ungx7")]
+script = ExtResource("2_1e0cq")

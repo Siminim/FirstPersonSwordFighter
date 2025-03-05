@@ -66,4 +66,10 @@ public partial class StandardSword : HeldItem
         return 1.0f;
     }
 
+    public void OnWeaponHitHurtbox(Area3D hurtbox)
+    {
+        if (hurtbox.GetParent() is Character character && character != this.character)
+            character.ApplyDamage(1.0f);
+    }
+
 }

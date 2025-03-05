@@ -201,31 +201,4 @@ public partial class Player : Character
         GameManager.GetPlayerCamera.Rotation = GameManager.GetPlayerCamera.Rotation.Lerp(new Vector3(cameraV.X, cameraV.Y, headRollTarget), (float)delta);
     }
 
-
-    // private void HeldItems(double delta)
-    // {
-    //     if (heldItems.Item1 != null)
-    //     {
-    //         if (Input.IsActionJustPressed("ActivateLeftHand"))
-    //             heldItems.Item1.OnPressActivate();
-
-    //         bool leftHandActive = Input.IsActionPressed("ActivateLeftHand");
-    //         heldItems.Item1.OnUpdate(leftHandActive, delta);
-
-    //         if (Input.IsActionJustReleased("ActivateLeftHand"))
-    //             heldItems.Item1.OnReleaseActivate();
-    //     }
-
-    //     if (heldItems.Item2 != null)
-    //     {
-    //         if (Input.IsActionJustPressed("ActivateRightHand"))
-    //             heldItems.Item2.OnPressActivate();
-
-    //         bool rightHandActive = Input.IsActionPressed("ActivateRightHand");
-    //         heldItems.Item2.OnUpdate(rightHandActive, delta);
-
-    //         if (Input.IsActionJustReleased("ActivateRightHand"))
-    //             heldItems.Item2.OnReleaseActivate();
-    //     }
-    // }
 }
