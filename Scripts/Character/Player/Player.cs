@@ -43,6 +43,14 @@ public partial class Player : Character
 
     #endregion
 
+    #region Running Variables
+
+    private float runningLookSpeedDivider = 3.0f;
+
+    private float GetRunningLookSpeedDivider() => runningLookSpeedDivider;
+
+    #endregion
+
     // ----------------------------------------------------------------------------------
     // -------------------------- Default Godot Functions -------------------------------
     // ---------------------------------------------------------------------------------- 
@@ -88,6 +96,7 @@ public partial class Player : Character
         RotateBodyToCamera(delta);
 
         MovementAction(delta);
+        RunAction();
         JumpAction();
         PollHeldItemActions();
 
@@ -107,6 +116,35 @@ public partial class Player : Character
     {
         Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
         Move(inputDir, delta);
+    }
+
+    private void RunAction()
+    {
+        if (Input.IsActionPressed("Run"))
+            ActivateRun();
+                
+        if (Input.IsActionJustReleased("Run"))
+            DeactivateRun();
+    }
+
+    protected override bool ActivateRun()
+    {
+        if (!base.ActivateRun())
+            return false;
+
+        MouseSensitivityModifiers.Divider += GetRunningLookSpeedDivider;
+        ControllerSensitivityModifiers.Divider += GetRunningLookSpeedDivider;
+        return true;
+    }
+
+    protected override bool DeactivateRun()
+    {
+        if (!base.DeactivateRun())
+            return false;
+            
+        MouseSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
+        ControllerSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
+        return true;
     }
 
     private void LookMouseAction(InputEvent @event)

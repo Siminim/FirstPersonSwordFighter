@@ -52,15 +52,24 @@ public partial class Character : CharacterBody3D
     #region Movement Variables
 
     public FloatReturnDelegateModifiers TopSpeedModifiers;
+    public FloatReturnDelegateModifiers GroundAccelerationModifiers;
 
-    private float groundAcceleration = 6.0f;
+    private float groundAcceleration = 3.5f;
     private float airAcceleration = 1.0f;
     private float accelerationBoost = 3.0f;
-    private float topSpeed = 10.0f;
+    private float topSpeed = 5.0f;
+    private float runningSpeedBoost = 5.0f;
+    private float runningAccelerationBoost = 5.0f;
+    private float runningRotateBodySpeedDivider = 3.0f;
+    private bool isRunning = false;
 
     public Vector3 localMovementVector = Vector3.Zero;
 
     private float GetDefaultTopSpeed() => topSpeed;
+    private float GetDefaultGroundAcceleration() => groundAcceleration;
+    private float GetRunningSpeedBoost() => runningSpeedBoost;
+    private float GetRunningAccelerationBoost() => runningAccelerationBoost;
+    private float GetRunningRotateBodySpeedDivider() => runningRotateBodySpeedDivider;
 
     #endregion
 
@@ -116,6 +125,7 @@ public partial class Character : CharacterBody3D
     {
         GravityModifiers.Additive += GetGravitySpeed;
         TopSpeedModifiers.Additive += GetDefaultTopSpeed;
+        GroundAccelerationModifiers.Additive += GetDefaultGroundAcceleration;
         JumpForceModifiers.Additive += GetDefaultJumpForce;
         RotateBodyModifiers.Additive += GetDefaultRotateBodySpeed;
 
@@ -132,6 +142,7 @@ public partial class Character : CharacterBody3D
     {
         GravityModifiers.Additive -= GetGravitySpeed;
         TopSpeedModifiers.Additive -= GetDefaultTopSpeed;
+        GroundAccelerationModifiers.Additive -= GetDefaultGroundAcceleration;
         JumpForceModifiers.Additive -= GetDefaultJumpForce;
         RotateBodyModifiers.Additive -= GetDefaultRotateBodySpeed;
 
@@ -157,7 +168,8 @@ public partial class Character : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
-        PushObjects();
+        ValidateRun();
+        //PushObjects();
         GroundAndAirEvents(delta);
         StepUp(delta);
         Jump(delta);
@@ -329,7 +341,7 @@ public partial class Character : CharacterBody3D
         Vector3 velocityDif = targetVelocity - new Vector3(Velocity.X * xBooster, 0, Velocity.Z * zBooster);
 
         if (onGround)
-            velocityDif *= groundAcceleration;
+            velocityDif *= GroundAccelerationModifiers.GetSafeFinalModifier();
         else
             velocityDif *= airAcceleration;
 
@@ -404,6 +416,58 @@ public partial class Character : CharacterBody3D
         else if (slot == HeldItemSlot.RightHand && rightHandItem != null)
             rightHandItem.Deactivate();
     }
+
+    protected virtual bool ActivateRun()
+    {
+        if (isRunning || !onGround)
+            return false;
+
+        Basis basis = GameManager.GetPlayerCamera.Basis;
+        Vector3 cameraDir = basis * Vector3.Forward;
+        
+        float xDif = Mathf.Abs(cameraDir.X - localMovementVector.X);
+        float zDif = Mathf.Abs(cameraDir.Z - localMovementVector.Z);
+       
+        if (xDif > 0.001f || zDif > 0.001f)
+            return false;
+
+        isRunning = true;
+        TopSpeedModifiers.Additive += GetRunningSpeedBoost;
+        GroundAccelerationModifiers.Additive += GetRunningAccelerationBoost;
+        RotateBodyModifiers.Divider += GetRunningRotateBodySpeedDivider;
+
+        return true;
+    }
+
+    protected void ValidateRun()
+    {
+        if (!isRunning)
+            return;
+
+        Basis basis = GameManager.GetPlayerCamera.Basis;
+        Vector3 cameraDir = basis * Vector3.Forward;
+
+        float xDif = Mathf.Abs(cameraDir.X - localMovementVector.X);
+        float zDif = Mathf.Abs(cameraDir.Z - localMovementVector.Z);
+
+        if (xDif > 0.001f || zDif > 0.001f)
+            DeactivateRun();
+    }
+
+    protected virtual bool DeactivateRun()
+    {
+        if (!isRunning)
+            return false;
+
+        isRunning = false;
+        TopSpeedModifiers.Additive -= GetRunningSpeedBoost;
+        GroundAccelerationModifiers.Additive -= GetRunningAccelerationBoost;
+        RotateBodyModifiers.Divider -= GetRunningRotateBodySpeedDivider;
+
+        return true;
+    }
+
+
 
     // ------------------------------------------------------------
     // ------------------ Use in Other Classes --------------------
