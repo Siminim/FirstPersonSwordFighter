@@ -6,6 +6,9 @@ public partial class HeldItem : Node3D
     protected Character character;
     protected Node3D hand;
 
+    private bool active = false;
+    public bool Active => active;
+
     public virtual void Assign(Character character, Node3D hand)
     {
         this.character = character;
@@ -24,12 +27,12 @@ public partial class HeldItem : Node3D
 
     public virtual void Activate()
     {
-        
+        active = true;
     }
 
     public virtual void Deactivate()
     {
-
+        active = false;
     }
 
 }

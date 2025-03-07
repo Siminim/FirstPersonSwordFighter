@@ -9,8 +9,6 @@ public partial class StandardShield : HeldItem
 
     private float slowdownDivider = 3.0f;
 
-    private bool shieldRaised = false;
-
     public override void Assign(Character character, Node3D hand)
     {
         base.Assign(character, hand);
@@ -37,17 +35,11 @@ public partial class StandardShield : HeldItem
     public override void OnUnequip()
     {
         character.TopSpeedModifiers.Divider -= GetSlowdownDivider;
-        shieldRaised = false;
-    }
-
-    public override void Activate()
-    {
-        shieldRaised = true;
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (shieldRaised)
+        if (Active)
         {
             Vector3 posDiff = hand.Position - raisedPosition;
             hand.Position -= posDiff * (float)delta * 10.0f;
@@ -66,14 +58,9 @@ public partial class StandardShield : HeldItem
         }
     }
 
-    public override void Deactivate()
-    {
-        shieldRaised = false;
-    }
-
     private float GetSlowdownDivider()
     {
-        if (shieldRaised)
+        if (Active)
             return slowdownDivider;
         
         return 1.0f;

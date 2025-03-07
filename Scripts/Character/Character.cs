@@ -391,9 +391,9 @@ public partial class Character : CharacterBody3D
 
     protected void ActivateItemInHand(HeldItemSlot slot)
     {
-        if (slot == HeldItemSlot.LeftHand && leftHandItem != null)
+        if (slot == HeldItemSlot.LeftHand && leftHandItem != null && !rightHandItem.Active)
             leftHandItem.Activate();
-        else if (slot == HeldItemSlot.RightHand && rightHandItem != null)
+        else if (slot == HeldItemSlot.RightHand && rightHandItem != null && !leftHandItem.Active)
             rightHandItem.Activate();
     }
 

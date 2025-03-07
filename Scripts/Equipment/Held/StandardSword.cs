@@ -16,6 +16,12 @@ public partial class StandardSword : HeldItem
         hitbox = GetNode<Area3D>("Hitbox");
     }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        if (!animationPlayer.IsPlaying() && Active)
+            base.Deactivate();
+    }
+
     public override void Assign(Character character, Node3D hand)
     {
         base.Assign(character, hand);
@@ -51,6 +57,12 @@ public partial class StandardSword : HeldItem
             return;
 
         animationPlayer.Play("Swing1");
+        base.Activate();
+    }
+
+    public override void Deactivate()
+    {
+        
     }
 
     private float GetSlowdownDivider()
