@@ -45,7 +45,7 @@ public partial class Player : Character
 
     #region Running Variables
 
-    private float runningLookSpeedDivider = 3.0f;
+    private float runningLookSpeedDivider = 2.0f;
 
     private float GetRunningLookSpeedDivider() => runningLookSpeedDivider;
 
@@ -97,6 +97,7 @@ public partial class Player : Character
 
         MovementAction(delta);
         RunAction();
+        DodgeDashAction();
         JumpAction();
         PollHeldItemActions();
 
@@ -145,6 +146,12 @@ public partial class Player : Character
         MouseSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
         ControllerSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
         return true;
+    }
+
+    protected void DodgeDashAction()
+    {
+        if (Input.IsActionJustPressed("Run"))
+            ActivateDodgeDash();
     }
 
     private void LookMouseAction(InputEvent @event)

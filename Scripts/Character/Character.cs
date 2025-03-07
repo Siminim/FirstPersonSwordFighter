@@ -133,9 +133,6 @@ public partial class Character : CharacterBody3D
         WhileInAir += CoyoteTimeCounter;
         WhileOnGround += ApplyFriction;
         OnLand += ResetCoyoteTimeCounter;
-
-        OnLand += () => GD.Print("Landed");
-        OnAirborne += () => GD.Print("Airborne");
     }
 
     public override void _ExitTree()
@@ -422,13 +419,10 @@ public partial class Character : CharacterBody3D
         if (isRunning || !onGround)
             return false;
 
-        Basis basis = GameManager.GetPlayerCamera.Basis;
-        Vector3 cameraDir = basis * Vector3.Forward;
-        
-        float xDif = Mathf.Abs(cameraDir.X - localMovementVector.X);
-        float zDif = Mathf.Abs(cameraDir.Z - localMovementVector.Z);
-       
-        if (xDif > 0.001f || zDif > 0.001f)
+        Vector3 forwardDirection = Basis * Vector3.Forward;
+        float directionAngle = forwardDirection.AngleTo(localMovementVector);
+
+        if (directionAngle > Mathf.DegToRad(70))
             return false;
 
         isRunning = true;
@@ -444,13 +438,10 @@ public partial class Character : CharacterBody3D
         if (!isRunning)
             return;
 
-        Basis basis = GameManager.GetPlayerCamera.Basis;
-        Vector3 cameraDir = basis * Vector3.Forward;
+        Vector3 forwardDirection = Basis * Vector3.Forward;
+        float directionAngle = forwardDirection.AngleTo(localMovementVector);
 
-        float xDif = Mathf.Abs(cameraDir.X - localMovementVector.X);
-        float zDif = Mathf.Abs(cameraDir.Z - localMovementVector.Z);
-
-        if (xDif > 0.001f || zDif > 0.001f)
+        if (directionAngle > Mathf.DegToRad(70))
             DeactivateRun();
     }
 
@@ -467,7 +458,23 @@ public partial class Character : CharacterBody3D
         return true;
     }
 
+    protected bool ActivateDodgeDash()
+    {
+        if (!onGround)
+            return false;
 
+        Vector3 forwardDirection = Basis * Vector3.Forward;
+
+        float xDif = Mathf.Abs(forwardDirection.X - localMovementVector.X);
+        float zDif = Mathf.Abs(forwardDirection.Z - localMovementVector.Z);
+       
+        if (xDif > 0.001f || zDif > 0.001f)
+        {
+            
+        }
+
+        return true;
+    }
 
     // ------------------------------------------------------------
     // ------------------ Use in Other Classes --------------------
