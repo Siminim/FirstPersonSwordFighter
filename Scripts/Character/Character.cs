@@ -251,12 +251,10 @@ public partial class Character : CharacterBody3D
 
     private void StepUp(double delta)
     {
-        // if (Velocity.Y != 0.0f)
-        //     return;
-
         KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
         if (collision == null)
             return;
+
 
         float collisionLength = Mathf.Abs((Position - collision.GetPosition()).Length());
         Position += new Vector3(localMovementVector.X * collisionLength * (float)delta, collision.GetNormal().Y * collisionLength * (float)delta * 50.0f, localMovementVector.Z * collisionLength * (float)delta);
