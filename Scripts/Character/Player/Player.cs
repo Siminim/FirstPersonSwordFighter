@@ -173,7 +173,7 @@ public partial class Player : Character
 
     private void CameraBob(double delta)
     {
-        if (IsOnFloor() && Velocity.X == 0 && Velocity.Z == 0)
+        if (onGround && Velocity.X == 0 && Velocity.Z == 0)
         {
             headBobTimer = 0.0f;
         }

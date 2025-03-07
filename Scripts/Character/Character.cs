@@ -216,7 +216,7 @@ public partial class Character : CharacterBody3D
 
     private void Jump(double delta)
     {
-        if (queuedJump && (IsOnFloor() || coyoteTimer < coyoteTimeLimit) && Velocity.Y <= 0.0f)
+        if (queuedJump && (onGround || coyoteTimer < coyoteTimeLimit) && Velocity.Y <= 0.0f)
         {
             Velocity += new Vector3(0, JumpForceModifiers.GetSafeFinalModifier(), 0);
             queuedJump = false;
@@ -233,37 +233,32 @@ public partial class Character : CharacterBody3D
         if (Velocity.Y > 0.0f)
             return false;
 
-        KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 0.5f);
+        KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 0.5f, true);
 
         if (collision == null)
             return false;
 
         if (collision.GetPosition().Y - Position.Y < -0.01f)
         {
-            GD.Print(collision.GetPosition().Y - Position.Y);
-            Position = new Vector3(Position.X, collision.GetPosition().Y - 0.05f, Position.Z);
-        }
-        else
-        {
-            ApplyGravity(delta);
+            float collisionLength = Mathf.Abs((Position - collision.GetPosition()).Length());
+            Position -= new Vector3(0, collision.GetNormal().Y * collisionLength * (float)delta * 20.0f, 0);
+            Velocity += Vector3.Down * 0.05f;
         }
 
         return true;
     }
-
 
     private void StepUp(double delta)
     {
         // if (Velocity.Y != 0.0f)
         //     return;
 
-        // DebugDraw3D.DrawRay(Position + Vector3.Up, localMovementVector, Velocity.Length() * (float)delta, new Color(0.0f, 1.0f, 0.0f), 0.0f);
+        KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
+        if (collision == null)
+            return;
 
-        // KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
-        // if (collision == null)
-        //     return;
-
-
+        float collisionLength = Mathf.Abs((Position - collision.GetPosition()).Length());
+        Position += new Vector3(localMovementVector.X * collisionLength * (float)delta, collision.GetNormal().Y * collisionLength * (float)delta * 50.0f, localMovementVector.Z * collisionLength * (float)delta);
     }
 
     // ------------------------------------------------------------
@@ -330,7 +325,7 @@ public partial class Character : CharacterBody3D
 
         Vector3 velocityDif = targetVelocity - new Vector3(Velocity.X * xBooster, 0, Velocity.Z * zBooster);
 
-        if (IsOnFloor())
+        if (onGround)
             velocityDif *= groundAcceleration;
         else
             velocityDif *= airAcceleration;
