@@ -158,8 +158,8 @@ public partial class Character : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         PushObjects();
-        StepUp(delta);
         GroundAndAirEvents(delta);
+        StepUp(delta);
         Jump(delta);
         MoveAndSlide();
     }
@@ -234,7 +234,7 @@ public partial class Character : CharacterBody3D
         if (Velocity.Y > 0.0f)
             return false;
 
-        KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 0.5f, true);
+        KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 0.55f, true);
 
         if (collision == null)
             return false;
@@ -251,10 +251,14 @@ public partial class Character : CharacterBody3D
 
     private void StepUp(double delta)
     {
+        if (Velocity.Y < 0.0f)
+            return;
         KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
-        if (collision == null)
+
+        if (collision == null || Mathf.Abs(collision.GetPosition().Y - Position.Y) > 0.5f)
             return;
 
+        DebugDraw3D.DrawSphere(collision.GetPosition(), 0.02f, new Color(0.0f, 0.0f, 1.0f), 0.0f);
 
         float collisionLength = Mathf.Abs((Position - collision.GetPosition()).Length());
         Position += new Vector3(localMovementVector.X * collisionLength * (float)delta, collision.GetNormal().Y * collisionLength * (float)delta * 50.0f, localMovementVector.Z * collisionLength * (float)delta);

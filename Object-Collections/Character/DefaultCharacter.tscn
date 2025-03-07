@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b3qvrcxvkf4yv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e7dxw"]
+height = 1.6
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ljyin"]
 
@@ -13,6 +14,7 @@ floor_snap_length = 0.25
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_e7dxw")
+debug_color = Color(0.281253, 0.6315, 0, 0.482353)
 
 [node name="CameraTarget" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
@@ -42,3 +44,4 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox"]
 shape = SubResource("CapsuleShape3D_w30vx")
+debug_color = Color(0.964706, 0, 0.501961, 0)
