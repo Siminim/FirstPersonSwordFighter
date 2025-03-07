@@ -3,6 +3,8 @@ using System;
 
 public partial class GameManager : Node
 {
+    static private Node3D level;
+
     static private Player player;
     static public Player GetPlayer => player;
 
@@ -15,15 +17,16 @@ public partial class GameManager : Node
     public override void _Ready()
     {
         GD.Print("Game Manager Ready");
+        level = GetTree().Root.GetNode<Node3D>("Level");
 
         Input.SetMouseMode(Input.MouseModeEnum.Captured);
 
         player = PlayerScene.Instantiate<Player>();
         player.Position = new Vector3(0.0f, 5.0f, 0.0f);
-        AddChild(player);
+        level.AddChild(player);
 
         playerCamera = PlayerCameraScene.Instantiate<PlayerCamera>();
         playerCamera.SetCameraTarget(player.CameraTarget);
-        AddChild(playerCamera);
+        level.AddChild(playerCamera);
     }
 }

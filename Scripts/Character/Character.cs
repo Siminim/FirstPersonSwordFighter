@@ -99,6 +99,7 @@ public partial class Character : CharacterBody3D
 
     #region Ground Condition Variables
 
+    protected bool onGround = false;
     protected bool previouslyOnGround = false;
 
     #endregion
@@ -121,6 +122,9 @@ public partial class Character : CharacterBody3D
         WhileInAir += CoyoteTimeCounter;
         WhileOnGround += ApplyFriction;
         OnLand += ResetCoyoteTimeCounter;
+
+        OnLand += () => GD.Print("Landed");
+        OnAirborne += () => GD.Print("Airborne");
     }
 
     public override void _ExitTree()
@@ -153,6 +157,7 @@ public partial class Character : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         PushObjects();
+        StepUp(delta);
         GroundAndAirEvents(delta);
         Jump(delta);
         MoveAndSlide();
@@ -164,18 +169,21 @@ public partial class Character : CharacterBody3D
 
     private void GroundAndAirEvents(double delta)
     {
-        if (IsOnFloor() && !previouslyOnGround)
+        if (IsOnFloor() && !onGround)
         {
             OnLand?.Invoke();
-            previouslyOnGround = true;
+            onGround = true;
         }
-        else if (!IsOnFloor() && previouslyOnGround)
+        else if (!IsOnFloor() && onGround)
         {
-            OnAirborne?.Invoke();
-            previouslyOnGround = false;
+            if (!StepDown(delta))
+            {
+                OnAirborne?.Invoke();
+                onGround = false;
+            }
         }
 
-        if (IsOnFloor())
+        if (onGround)
         {
             WhileOnGround?.Invoke(delta);
         }
@@ -220,6 +228,44 @@ public partial class Character : CharacterBody3D
             queuedJump = false;
     }
 
+    private bool StepDown(double delta)
+    {
+        if (Velocity.Y > 0.0f)
+            return false;
+
+        KinematicCollision3D collision = MoveAndCollide(Vector3.Down * 0.5f);
+
+        if (collision == null)
+            return false;
+
+        if (collision.GetPosition().Y - Position.Y < -0.01f)
+        {
+            GD.Print(collision.GetPosition().Y - Position.Y);
+            Position = new Vector3(Position.X, collision.GetPosition().Y - 0.05f, Position.Z);
+        }
+        else
+        {
+            ApplyGravity(delta);
+        }
+
+        return true;
+    }
+
+
+    private void StepUp(double delta)
+    {
+        // if (Velocity.Y != 0.0f)
+        //     return;
+
+        // DebugDraw3D.DrawRay(Position + Vector3.Up, localMovementVector, Velocity.Length() * (float)delta, new Color(0.0f, 1.0f, 0.0f), 0.0f);
+
+        // KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
+        // if (collision == null)
+        //     return;
+
+
+    }
+
     // ------------------------------------------------------------
     // ------------------ Called by Delegates ---------------------
     // ------------------------------------------------------------
@@ -257,6 +303,7 @@ public partial class Character : CharacterBody3D
     {
         coyoteTimer = 0.0f;
     }
+
 
     // ------------------------------------------------------------
     // ---------------- Use in Inherited Classes ------------------

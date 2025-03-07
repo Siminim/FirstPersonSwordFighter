@@ -1,6 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ne154penjf52"]
-
-[ext_resource type="PackedScene" uid="uid://cckjolnjryhw7" path="res://Object-Collections/Character/TestDummy.tscn" id="1_6m7py"]
+[gd_scene load_steps=4 format=3 uid="uid://ne154penjf52"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8syn"]
 albedo_color = Color(0.377883, 0.428699, 0.238642, 1)
@@ -25,12 +23,57 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 
 shadow_enabled = true
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.26178, 0.156328, -8.47309)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.125, -8)
 use_collision = true
-size = Vector3(3.52356, 0.321655, 6.78223)
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.375, -8.25)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.625, -8.5)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.875, -8.75)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.125, -9)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.375, -9.25)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.625, -9.5)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.875, -9.75)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2.125, -10)
+use_collision = true
+size = Vector3(3, 0.25, 0.25)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2.375, -11.375)
+use_collision = true
+size = Vector3(3, 0.25, 2.5)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 5.03972, 1.39279, -7.73655)
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 10.0397, 1.39279, -7.73655)
 use_collision = true
 size = Vector3(3.52356, 0.300293, 6.78223)
 
@@ -43,6 +86,3 @@ shape = SubResource("BoxShape3D_5exg5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 mesh = SubResource("BoxMesh_6m7py")
-
-[node name="Character" parent="." instance=ExtResource("1_6m7py")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -2, 0, -4)

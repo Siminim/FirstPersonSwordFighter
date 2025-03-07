@@ -5,12 +5,15 @@ public partial class StandardSword : HeldItem
 {
     private AnimationPlayer animationPlayer;
 
+    private Area3D hitbox;
+
     private float moveSpeedDivider = 5.0f;
     private float rotateSpeedDivider = 5.0f;
 
     public override void _Ready()
     {
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        hitbox = GetNode<Area3D>("Hitbox");
     }
 
     public override void Assign(Character character, Node3D hand)

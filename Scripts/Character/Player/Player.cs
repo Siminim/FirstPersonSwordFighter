@@ -53,6 +53,8 @@ public partial class Player : Character
 
         MouseSensitivityModifiers.Additive += GetDefaultMouseSensitivity;
         ControllerSensitivityModifiers.Additive += GetDefaultControllerSensitivity;
+
+        cameraTarget = GetNode<Node3D>("CameraTarget");
     }
 
     public override void _ExitTree()
@@ -66,7 +68,6 @@ public partial class Player : Character
     public override void _Ready()
     {
         base._Ready();
-        cameraTarget = GetNode<Node3D>("CameraTarget");
         baseCameraTargetPosition = cameraTarget.Position;
 
         PackedScene swordScene = ResourceLoader.Load<PackedScene>("res://Object-Collections/Equipment/Held/StandardSword/StandardSword.tscn");

@@ -1,5 +1,75 @@
 using Godot;
 
+public partial class Raycasting : Node3D
+{
+    public static Raycasting instance { get; private set; }
+
+    public override void _Ready()
+    {
+        instance = this;
+    }
+    
+    public static RaycastInfo MouseCast(uint collisionMask = 4294967295, Godot.Collections.Array<Rid> ignore = null)
+    {
+        Vector2 mousePos = instance.GetViewport().GetMousePosition();
+        Camera3D camera = instance.GetViewport().GetCamera3D();
+
+        Vector3 start = camera.ProjectRayOrigin(mousePos);
+        Vector3 direction = camera.ProjectRayNormal(mousePos);
+
+        PhysicsDirectSpaceState3D spaceState = instance.GetWorld3D().DirectSpaceState;
+
+        Vector3 end = start + direction * 1000;
+
+        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
+        query.CollideWithAreas = true;
+
+        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
+
+        return new RaycastInfo(result, direction, end);
+    }
+    public static RaycastInfo MouseCast(uint collisionMask = 4294967295, params Rid[] ignore)
+    {
+        return MouseCast(collisionMask, new Godot.Collections.Array<Rid>(ignore));
+    }
+
+    public static RaycastInfo LineCast(Vector3 start, Vector3 end, uint collisionMask = 4294967295, Godot.Collections.Array<Rid> ignore = null)
+    {
+        PhysicsDirectSpaceState3D spaceState = instance.GetWorld3D().DirectSpaceState;
+
+        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
+        query.CollideWithBodies = true;
+
+        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
+
+        Vector3 direction = (end - start).Normalized();
+
+        return new RaycastInfo(result, direction, end);
+    }
+    public static RaycastInfo LineCast(Vector3 start, Vector3 end, uint collisionMask = 4294967295, params Rid[] ignore)
+    {
+        return LineCast(start, end, collisionMask, new Godot.Collections.Array<Rid>(ignore));
+    }
+
+    public static RaycastInfo RayCast(Vector3 start, Vector3 direction, float distance, uint collisionMask = 4294967295, Godot.Collections.Array<Rid> ignore = null)
+    {
+        PhysicsDirectSpaceState3D spaceState = instance.GetWorld3D().DirectSpaceState;
+
+        Vector3 end = start + direction * distance;
+        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
+        query.CollideWithBodies = true;
+
+        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
+
+        return new RaycastInfo(result, direction, end);
+    }
+    public static RaycastInfo RayCast(Vector3 start, Vector3 direction, float distance, uint collisionMask = 4294967295, params Rid[] ignore)
+    {
+        return RayCast(start, direction, distance, collisionMask, new Godot.Collections.Array<Rid>(ignore));
+    }
+
+}
+
 public class RaycastInfo
 {
     public static readonly Vector3 Invalid = new Vector3(-1.0f, -1.0f, -1.0f);
@@ -47,54 +117,3 @@ public class RaycastInfo
 }
 
 
-public static class Raycasting
-{
-    public static RaycastInfo MouseCast(Viewport viewport, World3D world, Godot.Collections.Array<Rid> ignore = null, uint collisionMask = 4294967295)
-    {
-        Vector2 mousePos = viewport.GetMousePosition();
-        Camera3D camera = viewport.GetCamera3D();
-
-        Vector3 start = camera.ProjectRayOrigin(mousePos);
-        Vector3 direction = camera.ProjectRayNormal(mousePos);
-
-        PhysicsDirectSpaceState3D spaceState = world.DirectSpaceState;
-
-        Vector3 end = start + direction * 1000;
-
-        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
-        query.CollideWithAreas = true;
-
-        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
-
-        return new RaycastInfo(result, direction, end);
-    }
-
-    public static RaycastInfo LineCast(World3D world, Vector3 start, Vector3 end, Godot.Collections.Array<Rid> ignore = null, uint collisionMask = 4294967295)
-    {
-        PhysicsDirectSpaceState3D spaceState = world.DirectSpaceState;
-
-
-        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
-        query.CollideWithBodies = true;
-
-        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
-
-        Vector3 direction = (end - start).Normalized();
-
-        return new RaycastInfo(result, direction, end);
-    }
-
-    public static RaycastInfo RayCast(World3D world, Vector3 start, Vector3 direction, float distance, Godot.Collections.Array<Rid> ignore = null, uint collisionMask = 4294967295)
-    {
-        PhysicsDirectSpaceState3D spaceState = world.DirectSpaceState;
-
-        Vector3 end = start + direction * distance;
-        PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(start, end, collisionMask, ignore);
-        query.CollideWithBodies = true;
-
-        Godot.Collections.Dictionary result = spaceState.IntersectRay(query);
-
-        return new RaycastInfo(result, direction, end);
-    }
-
-}
