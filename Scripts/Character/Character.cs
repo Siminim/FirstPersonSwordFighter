@@ -35,7 +35,7 @@ public partial class Character : CharacterBody3D
 
     #region Friction Variables
 
-    public float frictionAmount = 0.8f;
+    public float frictionAmount = 0.85f;
 
     #endregion
 
@@ -53,9 +53,10 @@ public partial class Character : CharacterBody3D
 
     public FloatReturnDelegateModifiers TopSpeedModifiers;
 
-    private float groundAcceleration = 5.0f;
+    private float groundAcceleration = 6.0f;
     private float airAcceleration = 1.0f;
-    private float topSpeed = 8.0f;
+    private float accelerationBoost = 3.0f;
+    private float topSpeed = 10.0f;
 
     public Vector3 localMovementVector = Vector3.Zero;
 
@@ -72,7 +73,7 @@ public partial class Character : CharacterBody3D
     private float jumpForce = 8.5f;
 
     private float timeSinceQueuedJump = 0.0f;
-    private float jumpBuffer = 0.175f;
+    private float jumpBuffer = 0.125f;
 
     private float jumpDecay = 2.0f;
 
@@ -318,10 +319,10 @@ public partial class Character : CharacterBody3D
         float xBooster = 1.0f;
         float zBooster = 1.0f;
 
-        // if (Mathf.Sign(localMovementVector.X) != Mathf.Sign(character.Velocity.X))
-        //     xBooster = topSpeedBoost;
-        // if (Mathf.Sign(localMovementVector.Z) != Mathf.Sign(character.Velocity.Z))
-        //     zBooster = topSpeedBoost;
+        if (Mathf.Sign(localMovementVector.X) != Mathf.Sign(Velocity.X))
+            xBooster = accelerationBoost;
+        if (Mathf.Sign(localMovementVector.Z) != Mathf.Sign(Velocity.Z))
+            zBooster = accelerationBoost;
 
         Vector3 velocityDif = targetVelocity - new Vector3(Velocity.X * xBooster, 0, Velocity.Z * zBooster);
 
