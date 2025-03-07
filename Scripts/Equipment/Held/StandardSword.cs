@@ -3,8 +3,6 @@ using System;
 
 public partial class StandardSword : HeldItem
 {
-    private AnimationPlayer animationPlayer;
-
     private Area3D hitbox;
 
     private float moveSpeedDivider = 5.0f;
@@ -12,13 +10,12 @@ public partial class StandardSword : HeldItem
 
     public override void _Ready()
     {
-        animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         hitbox = GetNode<Area3D>("Hitbox");
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!animationPlayer.IsPlaying() && Active)
+        if (!character.animationPlayer.IsPlaying() && Active)
             base.Deactivate();
     }
 
@@ -53,10 +50,10 @@ public partial class StandardSword : HeldItem
 
     public override void Activate()
     {
-        if (animationPlayer.IsPlaying())
+        if (Active)
             return;
 
-        animationPlayer.Play("Swing1");
+        character.animationPlayer.Play("Right_Hand_Sword_Swing");
         base.Activate();
     }
 
@@ -67,7 +64,7 @@ public partial class StandardSword : HeldItem
 
     private float GetSlowdownDivider()
     {
-        if (animationPlayer.IsPlaying())
+        if (Active)
             return moveSpeedDivider;
 
         return 1.0f;
@@ -75,7 +72,7 @@ public partial class StandardSword : HeldItem
 
     private float GetRotateSpeedDivider()
     {
-        if (animationPlayer.IsPlaying())
+        if (Active)
             return rotateSpeedDivider;
 
         return 1.0f;

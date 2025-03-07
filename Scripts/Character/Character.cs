@@ -10,10 +10,14 @@ public partial class Character : CharacterBody3D
 
     #region Nodes
 
+    public AnimationPlayer animationPlayer;
+
     protected Node3D leftHand;
     public Node3D LeftHand => leftHand;
     protected Node3D rightHand;
     public Node3D RightHand => rightHand;
+
+
 
     protected Vector3 leftHandDefaultPosition;
     public Vector3 LeftHandDefaultPosition => leftHandDefaultPosition;
@@ -153,6 +157,7 @@ public partial class Character : CharacterBody3D
     {
         leftHand = GetNode<Node3D>("LeftHand");
         rightHand = GetNode<Node3D>("RightHand");
+        animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
         leftHandDefaultPosition = leftHand.Position;
         rightHandDefaultPosition = rightHand.Position;

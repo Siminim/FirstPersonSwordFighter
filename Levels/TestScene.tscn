@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://ne154penjf52"]
+[gd_scene load_steps=5 format=3 uid="uid://ne154penjf52"]
+
+[ext_resource type="PackedScene" uid="uid://cckjolnjryhw7" path="res://Object-Collections/Character/TestDummy.tscn" id="1_6m7py"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8syn"]
 albedo_color = Color(0.377883, 0.428699, 0.238642, 1)
@@ -161,3 +163,6 @@ shape = SubResource("BoxShape3D_5exg5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 mesh = SubResource("BoxMesh_6m7py")
+
+[node name="Character" parent="." instance=ExtResource("1_6m7py")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.75, 0, -3.5)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b3qvrcxvkf4yv"]
+[gd_scene load_steps=8 format=3 uid="uid://b3qvrcxvkf4yv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e7dxw"]
 height = 1.6
@@ -6,6 +6,66 @@ height = 1.6
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ljyin"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w30vx"]
+
+[sub_resource type="Animation" id="Animation_acygk"]
+resource_name = "Default_Hands_Up"
+length = 0.25
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftHand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.75, 1, -0.75)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightHand")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.75, 1, -0.75)
+
+[sub_resource type="Animation" id="Animation_w8t1l"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftHand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.75, 1, -0.75)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightHand")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.75, 1, -0.75)
+
+[sub_resource type="Animation" id="Animation_g4031"]
+resource_name = "Right_Hand_Sword_Swing"
+length = 0.65
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RightHand")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.75, 1, -0.75, 0.2, 1, 0.7, 1.7, -0.45, 0.433333, 1, 0.4, 0.9, -0.75, 0.6, 1, 0.75, 1, -0.75)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightHand")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0.707, 0, 0, 0.707, 0.166667, 1, -0.496, 0.323, 0.206, 0.779, 0.4, 1, -0.683, 0.182, 0.182, 0.683, 0.6, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6se0m"]
+_data = {
+&"Default_Hands_Up": SubResource("Animation_acygk"),
+&"RESET": SubResource("Animation_w8t1l"),
+&"Right_Hand_Sword_Swing": SubResource("Animation_g4031")
+}
 
 [node name="Character" type="CharacterBody3D"]
 floor_max_angle = 0.872665
@@ -15,9 +75,6 @@ floor_snap_length = 0.25
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_e7dxw")
 debug_color = Color(0.281253, 0.6315, 0, 0.482353)
-
-[node name="CameraTarget" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 
 [node name="LeftHand" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 1, -0.75)
@@ -45,3 +102,8 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBox"]
 shape = SubResource("CapsuleShape3D_w30vx")
 debug_color = Color(0.964706, 0, 0.501961, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6se0m")
+}

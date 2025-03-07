@@ -1,44 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://ccy530sgol0am"]
+[gd_scene load_steps=3 format=3 uid="uid://ccy530sgol0am"]
 
 [ext_resource type="Script" uid="uid://bskvrye7kilcd" path="res://Scripts/Equipment/Held/StandardSword.cs" id="1_fugnd"]
-
-[sub_resource type="Animation" id="Animation_auxdr"]
-resource_name = "Idle"
-
-[sub_resource type="Animation" id="Animation_3q828"]
-length = 0.001
-tracks/0/type = "position_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0)
-
-[sub_resource type="Animation" id="Animation_6bj7w"]
-resource_name = "Swing1"
-length = 1.25
-tracks/0/type = "position_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, 0, 0.385, 0.065, 0.5, 1, 0, 0.385, 0.065, 0.6, 1, 0, -0.25, -0.2, 0.933333, 1, 0, -0.25, -0.2, 1.25, 1, 0, 0, 0)
-tracks/1/type = "rotation_3d"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0.383, 0, 0, 0.924, 0.5, 1, 0.383, 0, 0, 0.924, 0.6, 1, -0.629, 0, 0, 0.777, 0.933333, 1, -0.629, 0, 0, 0.777, 1.25, 1, 0, 0, 0, 1)
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_3q828"]
-_data = {
-&"Idle": SubResource("Animation_auxdr"),
-&"RESET": SubResource("Animation_3q828"),
-&"Swing1": SubResource("Animation_6bj7w")
-}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_auxdr"]
 size = Vector3(0.25, 1.5, 0.25)
@@ -56,11 +18,6 @@ size = Vector3(0.075, 0.075, 0.1)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 size = Vector3(0.025, 0.175, 0.025)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3q828")
-}
 
 [node name="Hitbox" type="Area3D" parent="."]
 collision_layer = 0

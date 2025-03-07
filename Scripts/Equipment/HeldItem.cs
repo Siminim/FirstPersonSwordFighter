@@ -42,3 +42,9 @@ public enum HeldItemSlot
     LeftHand,
     RightHand
 }
+
+public enum HeldItemType
+{
+    Sword,
+    Shield
+}
