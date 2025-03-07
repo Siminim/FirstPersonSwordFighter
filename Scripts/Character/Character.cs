@@ -464,14 +464,12 @@ public partial class Character : CharacterBody3D
             return false;
 
         Vector3 forwardDirection = Basis * Vector3.Forward;
+        float directionAngle = forwardDirection.AngleTo(localMovementVector);
 
-        float xDif = Mathf.Abs(forwardDirection.X - localMovementVector.X);
-        float zDif = Mathf.Abs(forwardDirection.Z - localMovementVector.Z);
-       
-        if (xDif > 0.001f || zDif > 0.001f)
-        {
-            
-        }
+        if (directionAngle <= Mathf.DegToRad(70))
+            return false;
+
+        Velocity = new Vector3(topSpeed * localMovementVector.X * 1.8f, 0, topSpeed * localMovementVector.Z * 1.8f);
 
         return true;
     }
