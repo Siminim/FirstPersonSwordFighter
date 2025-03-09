@@ -121,6 +121,8 @@ public partial class Character : CharacterBody3D
     private HeldItem leftHandItem = null;
     private HeldItem rightHandItem = null;
 
+    public bool performingAction = false;
+
     // ----------------------------------------------------------------------------------
     // -------------------------- Default Godot Functions -------------------------------
     // ---------------------------------------------------------------------------------- 
@@ -405,10 +407,11 @@ public partial class Character : CharacterBody3D
 
     protected void ActivateItemInHand(HeldItemSlot slot)
     {
-        if (slot == HeldItemSlot.LeftHand && leftHandItem != null && !rightHandItem.Active)
+        if (slot == HeldItemSlot.LeftHand && leftHandItem != null && !rightHandItem.Active && !performingAction)
             leftHandItem.Activate();
-        else if (slot == HeldItemSlot.RightHand && rightHandItem != null && !leftHandItem.Active)
+        else if (slot == HeldItemSlot.RightHand && rightHandItem != null && !leftHandItem.Active && !performingAction)
             rightHandItem.Activate();
+
     }
 
     protected void DeactivateItemInHand(HeldItemSlot slot)
@@ -421,15 +424,16 @@ public partial class Character : CharacterBody3D
 
     protected virtual bool ActivateRun()
     {
-        if (isRunning || !onGround)
+        if (isRunning || !onGround || performingAction)
             return false;
 
         Vector3 forwardDirection = Basis * Vector3.Forward;
         float directionAngle = forwardDirection.AngleTo(localMovementVector);
 
-        if (directionAngle > Mathf.DegToRad(70))
+        if (directionAngle > Mathf.DegToRad(95))
             return false;
 
+        performingAction = true;
         isRunning = true;
         TopSpeedModifiers.Additive += GetRunningSpeedBoost;
         GroundAccelerationModifiers.Additive += GetRunningAccelerationBoost;
@@ -446,7 +450,7 @@ public partial class Character : CharacterBody3D
         Vector3 forwardDirection = Basis * Vector3.Forward;
         float directionAngle = forwardDirection.AngleTo(localMovementVector);
 
-        if (directionAngle > Mathf.DegToRad(70))
+        if (directionAngle > Mathf.DegToRad(95))
             DeactivateRun();
     }
 
@@ -465,13 +469,13 @@ public partial class Character : CharacterBody3D
 
     protected bool ActivateDodgeDash()
     {
-        if (!onGround)
+        if (!onGround || performingAction)
             return false;
 
         Vector3 forwardDirection = Basis * Vector3.Forward;
         float directionAngle = forwardDirection.AngleTo(localMovementVector);
 
-        if (directionAngle <= Mathf.DegToRad(70))
+        if (directionAngle <= Mathf.DegToRad(95))
             return false;
 
         Velocity = new Vector3(topSpeed * localMovementVector.X * 1.8f, 0, topSpeed * localMovementVector.Z * 1.8f);
@@ -485,7 +489,7 @@ public partial class Character : CharacterBody3D
 
     public void ApplyDamage(float damage)
     {
-        GD.Print($"Character took {damage} damage");
+        DebugDraw3D.DrawSphere(Position + Vector3.Up * 2.0f, 0.6f, new Color(1.0f, 0.0f, 0.0f), 0.8f);
     }
 
 }

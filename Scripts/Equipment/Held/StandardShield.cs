@@ -41,6 +41,7 @@ public partial class StandardShield : HeldItem
     {
         if (Active)
         {
+            character.performingAction = true;
             Vector3 posDiff = hand.Position - raisedPosition;
             hand.Position -= posDiff * (float)delta * 10.0f;
 
@@ -49,6 +50,7 @@ public partial class StandardShield : HeldItem
         }
         else
         {
+            character.performingAction = false;
             Vector3 posDiff = hand.Position - defaultPosition;
             hand.Position -= posDiff * (float)delta * 10.0f;
 

@@ -16,7 +16,10 @@ public partial class StandardSword : HeldItem
     public override void _PhysicsProcess(double delta)
     {
         if (!character.animationPlayer.IsPlaying() && Active)
+        {
             base.Deactivate();
+            character.performingAction = false;
+        }
     }
 
     public override void Assign(Character character, Node3D hand)
@@ -55,6 +58,7 @@ public partial class StandardSword : HeldItem
 
         character.animationPlayer.Play("Right_Hand_Sword_Swing");
         base.Activate();
+        character.performingAction = true;
     }
 
     public override void Deactivate()

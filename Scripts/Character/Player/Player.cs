@@ -15,7 +15,7 @@ public partial class Player : Character
     public FloatReturnDelegateModifiers MouseSensitivityModifiers;
     public FloatReturnDelegateModifiers ControllerSensitivityModifiers;
 
-    private const float MouseSensitivity = 0.00125f;
+    private const float MouseSensitivity = 0.000675f;
     private const float ControllerSensitivity = 3.0f;
     public readonly float reach = 3.0f;
 
@@ -42,15 +42,6 @@ public partial class Player : Character
     private float headRollTarget = 0.0f;
 
     #endregion
-
-    #region Running Variables
-
-    private float runningLookSpeedDivider = 2.0f;
-
-    private float GetRunningLookSpeedDivider() => runningLookSpeedDivider;
-
-    #endregion
-
 
     // ----------------------------------------------------------------------------------
     // -------------------------- Default Godot Functions -------------------------------
@@ -122,7 +113,7 @@ public partial class Player : Character
 
     private void RunAction()
     {
-        if (Input.IsActionPressed("Run"))
+        if (Input.IsActionJustPressed("Run"))
             ActivateRun();
                 
         if (Input.IsActionJustReleased("Run"))
@@ -134,8 +125,6 @@ public partial class Player : Character
         if (!base.ActivateRun())
             return false;
 
-        MouseSensitivityModifiers.Divider += GetRunningLookSpeedDivider;
-        ControllerSensitivityModifiers.Divider += GetRunningLookSpeedDivider;
         return true;
     }
 
@@ -144,8 +133,6 @@ public partial class Player : Character
         if (!base.DeactivateRun())
             return false;
             
-        MouseSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
-        ControllerSensitivityModifiers.Divider -= GetRunningLookSpeedDivider;
         return true;
     }
 
